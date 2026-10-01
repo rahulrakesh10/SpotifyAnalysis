@@ -2,6 +2,17 @@
 
 Enriches Spotify's 730 most-streamed songs (snapshot July 2026) with metadata and audio features, then tests what predicts how fast a song is still gaining streams once release age is accounted for.
 
+## Findings
+
+- Release age explains about half the variation in growth (out-of-sample R² 0.52 on held-out artists).
+- Beyond age, only country and Latin music clearly stand out: each grows about 52% faster than pop of the same age.
+- Audio features, explicit content, collaborations and release format show no reliable effect.
+
+![Growth vs release age](reports/velocity_vs_age.png)
+![Effects beyond release age](reports/effects.png)
+
+Full tables in [reports/results.md](reports/results.md).
+
 ## Run
 
 ```bash
@@ -23,9 +34,8 @@ Needs `pandas`, `requests`, `statsmodels`, `scikit-learn`, `matplotlib`. No API 
 
 - `data/spotify_2025_enriched.csv`: one row per song, 40+ columns
 - `reports/results.md`: model comparison and effect tables
-- `reports/songs_with_residuals.csv`: each song's growth vs the expected pace for its age
-- `reports/dashboard.html`: interactive dashboard (generated from `dashboard_template.html`)
 - `reports/*.png`: static charts
+- Generated locally, not committed: `reports/dashboard.html` (interactive dashboard built from `dashboard_template.html`) and `reports/songs_with_residuals.csv` (each song's growth vs the expected pace for its age)
 
 ## Method notes
 
