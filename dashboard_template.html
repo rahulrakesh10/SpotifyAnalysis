@@ -1,0 +1,390 @@
+<meta charset="utf-8">
+<title>What Makes a Song Rise?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column of findings, each finding followed by the chart that proves it; explorer last. */
+:root {
+  --bg: #f6f6f2;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #7c7a74;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --ring: rgba(11,11,11,0.10);
+  --series: #2a78d6;
+  --rise: #2a78d6;
+  --fade: #e34948;
+  --mid: #f0efec;
+  --hl: #eb6834;
+  --font-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-data: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f0f0e; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #8f8d86;
+    --grid: #2c2c2a; --axis: #45453f; --ring: rgba(255,255,255,0.10);
+    --series: #3987e5; --rise: #3987e5; --fade: #e66767; --mid: #383835; --hl: #d95926;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f0f0e; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #8f8d86;
+  --grid: #2c2c2a; --axis: #45453f; --ring: rgba(255,255,255,0.10);
+  --series: #3987e5; --rise: #3987e5; --fade: #e66767; --mid: #383835; --hl: #d95926;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.55 var(--font-body); padding-inline: 16px; padding-block: 40px 64px; }
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+h1, h2 { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.015em; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); line-height: 1.04; max-width: 18ch; }
+h2 { font-size: clamp(1.35rem, 2.6vw, 1.75rem); line-height: 1.15; }
+p { margin: 0; max-width: 66ch; }
+.eyebrow { font: 500 0.75rem/1 var(--font-data); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.lede { color: var(--ink-2); font-size: 1.12rem; }
+.num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+header { display: flex; flex-direction: column; gap: 18px; }
+section { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.panel { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 20px; min-width: 0; }
+
+/* Findings strip */
+.findings { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.finding { display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; }
+.finding .big { font: 700 2.1rem/1 var(--font-display); letter-spacing: -0.02em; }
+.finding .what { font-weight: 600; }
+.finding .why { color: var(--ink-2); font-size: 0.94rem; }
+@media (max-width: 760px) { .findings { grid-template-columns: 1fr; } }
+
+/* Charts */
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { font: 400 11px var(--font-data); fill: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 18px; font-size: 0.88rem; color: var(--ink-2); align-items: center; }
+.key { display: inline-flex; align-items: center; gap: 7px; }
+.swatch-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--series); opacity: 0.7; }
+.swatch-line { width: 18px; height: 2px; background: var(--ink); }
+.swatch-hl { width: 10px; height: 10px; border-radius: 50%; background: var(--hl); box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--hl); }
+.tip { position: absolute; pointer-events: none; z-index: 5; background: var(--surface); color: var(--ink); border: 1px solid var(--ring);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.14); border-radius: 8px; padding: 10px 12px; font-size: 0.86rem; line-height: 1.4; max-width: 260px; }
+.tip b { display: block; font-weight: 600; }
+.tip .k { color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+input[type="search"], select, button {
+  font: inherit; font-size: 0.94rem; color: var(--ink); background: var(--surface); border: 1px solid var(--axis);
+  border-radius: 7px; padding: 7px 10px; min-width: 0;
+}
+input[type="search"] { flex: 1 1 220px; }
+button { cursor: pointer; }
+button:hover { border-color: var(--ink-2); }
+:focus-visible { outline: 2px solid var(--series); outline-offset: 2px; }
+
+/* Forest plot */
+.forest { display: flex; flex-direction: column; }
+.f-group { font: 500 0.72rem/1 var(--font-data); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 16px 0 6px; }
+.f-row { display: grid; grid-template-columns: minmax(110px, 190px) minmax(0, 1fr) 64px; gap: 12px; align-items: center; min-height: 30px; }
+.f-row:hover { background: var(--mid); }
+.f-label { font-size: 0.92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-left: 4px; }
+.f-lane { position: relative; height: 22px; }
+.f-zero { position: absolute; top: -4px; bottom: -4px; width: 1px; background: var(--ink-2); }
+.f-ci { position: absolute; top: 10px; height: 2px; background: var(--series); border-radius: 2px; }
+.f-dot { position: absolute; top: 5px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; border: 2px solid var(--series); background: var(--surface); }
+.f-dot.clear { background: var(--series); }
+.f-val { text-align: right; font: 400 0.85rem var(--font-data); font-variant-numeric: tabular-nums; color: var(--ink-2); padding-right: 4px; }
+.f-val.clear { color: var(--ink); font-weight: 500; }
+.f-axis { display: grid; grid-template-columns: minmax(110px, 190px) minmax(0, 1fr) 64px; gap: 12px; margin-top: 6px; }
+.f-ticks { position: relative; height: 16px; font: 400 11px var(--font-data); color: var(--muted); }
+.f-ticks span { position: absolute; transform: translateX(-50%); }
+@media (max-width: 520px) { .f-row, .f-axis { grid-template-columns: 104px minmax(0, 1fr) 52px; gap: 8px; } }
+
+/* Tables */
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+th { text-align: left; font: 500 0.72rem/1.2 var(--font-data); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--axis); white-space: nowrap; }
+td { padding: 9px 10px; border-bottom: 1px solid var(--grid); vertical-align: middle; }
+td.r, th.r { text-align: right; }
+.song b { font-weight: 600; display: block; }
+.song span { color: var(--ink-2); font-size: 0.86rem; }
+.flag { font: 500 0.7rem var(--font-data); color: var(--muted); border: 1px solid var(--axis); border-radius: 4px; padding: 0 4px; margin-left: 4px; white-space: nowrap; }
+.dv { display: grid; grid-template-columns: 1fr 1fr; width: 150px; height: 14px; position: relative; }
+.dv::after { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--axis); }
+.dv i { display: block; height: 10px; margin-top: 2px; border-radius: 2px; }
+.dv .neg { justify-self: end; background: var(--fade); border-radius: 2px 0 0 2px; }
+.dv .pos { background: var(--rise); border-radius: 0 2px 2px 0; }
+.dvcell { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+.dvcell .num { min-width: 58px; text-align: right; }
+.count { color: var(--muted); font-size: 0.88rem; }
+.models td:first-child { font-weight: 600; }
+
+/* Method */
+.method { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.method h3 { font: 600 1rem var(--font-body); margin: 0 0 6px; }
+.method ul { margin: 0; padding-left: 18px; color: var(--ink-2); display: flex; flex-direction: column; gap: 6px; }
+@media (max-width: 760px) { .method { grid-template-columns: 1fr; } }
+footer { color: var(--muted); font-size: 0.86rem; }
+@media (prefers-reduced-motion: no-preference) { .f-row, button { transition: background 120ms, border-color 120ms; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Spotify's most-streamed songs · snapshot July 2026</span>
+    <h1>What makes a song rise?</h1>
+    <p class="lede" id="lede"></p>
+  </header>
+
+  <div class="findings" id="findings"></div>
+
+  <section>
+    <span class="eyebrow">Finding 1</span>
+    <h2>Release age sets the pace</h2>
+    <p>Each dot is a song. The vertical axis shows today's streams as a share of everything the song has ever streamed, which measures how fast it is still growing. Growth drops steadily for about three years after release, then levels off. The black line is the expected pace for a song of that age; everything below compares songs to it.</p>
+    <div class="panel">
+      <div class="controls" style="margin-bottom:14px">
+        <label for="hl-search" class="eyebrow">Highlight</label>
+        <input type="search" id="hl-search" placeholder="Artist or song, e.g. Bad Bunny">
+      </div>
+      <div class="chart" id="scatter"></div>
+      <div class="legend" style="margin-top:10px">
+        <span class="key"><span class="swatch-dot"></span>Song</span>
+        <span class="key"><span class="swatch-line"></span>Expected pace for its age</span>
+        <span class="key" id="hl-key" hidden><span class="swatch-hl"></span><span id="hl-label">Highlighted</span></span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Finding 2</span>
+    <h2>Beyond age, almost nothing predicts growth</h2>
+    <p id="forest-intro"></p>
+    <div class="panel">
+      <div class="legend" style="margin-bottom:6px">
+        <span class="key"><span class="f-dot clear" style="position:static;margin:0"></span>Holds up after adjusting for testing ~30 factors</span>
+        <span class="key"><span class="f-dot" style="position:static;margin:0"></span>Could be chance</span>
+        <span class="key"><span class="swatch-line" style="background:var(--series)"></span>95% range</span>
+      </div>
+      <div class="forest" id="forest"></div>
+    </div>
+    <div class="panel scroll">
+      <table class="models">
+        <thead><tr><th>Model</th><th class="r">Songs</th><th class="r">Fit on its own songs (R²)</th><th class="r">Fit on unseen artists (R²)</th></tr></thead>
+        <tbody id="models"></tbody>
+      </table>
+    </div>
+    <p class="count">The unseen-artists column is the honest test. Each artist's songs are held out together, and the model predicts them without having seen that artist. Extra factors that raise the first column but not the second are fitting noise.</p>
+  </section>
+
+  <section>
+    <span class="eyebrow">Explorer</span>
+    <h2>Ahead of or behind schedule</h2>
+    <p>How each song is growing compared with the expected pace for its age. +100% means it is gaining streams twice as fast as a typical song released at the same time.</p>
+    <div class="panel">
+      <div class="controls" style="margin-bottom:12px">
+        <input type="search" id="q" placeholder="Search song or artist" aria-label="Search song or artist">
+        <select id="genre" aria-label="Genre"></select>
+        <select id="country" aria-label="Artist country"></select>
+        <select id="sort" aria-label="Sort">
+          <option value="ahead">Most ahead of schedule</option>
+          <option value="behind">Most behind schedule</option>
+          <option value="streams">Most streams overall</option>
+          <option value="newest">Newest first</option>
+        </select>
+      </div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Song</th><th>Genre</th><th>From</th><th>Released</th><th class="r">Daily share</th><th class="r">Vs expected pace</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="controls" style="margin-top:12px; justify-content:space-between">
+        <span class="count" id="count"></span>
+        <button id="more" type="button">Show 40 more</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Method</span>
+    <h2>How this was built</h2>
+    <div class="method panel">
+      <div>
+        <h3>Data</h3>
+        <ul id="data-notes"></ul>
+      </div>
+      <div>
+        <h3>Limits</h3>
+        <ul>
+          <li>Every song here already has more than 100M streams. These results describe hits, not songs in general.</li>
+          <li>One snapshot in time. "Growth" is today's streams relative to the all-time total, not a measured trend over weeks.</li>
+          <li>Genre comes from the album on Deezer and is coarse. "Pop" covers a lot of ground.</li>
+          <li>A few release dates may still be reissue dates where no original release was on record.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>Sources: Spotify stream counts (source CSV), Deezer, MusicBrainz, ReccoBeats. Model: ordinary least squares on log growth with a spline for release age, standard errors clustered by artist, Holm-adjusted p-values.</footer>
+</div>
+
+<script>
+const D = __DATA__;
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pct = (v, d = 0) => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d) + "%";
+const big = (n) => n >= 1e9 ? (n / 1e9).toFixed(2) + "B" : (n / 1e6).toFixed(0) + "M";
+const ageText = (days) => days < 60 ? days + " days" : days < 730 ? Math.round(days / 30.4) + " months" : (days / 365.25).toFixed(1) + " years";
+const COUNTRY = { US: "US", MX: "Mexico", BR: "Brazil", GB: "UK", CA: "Canada", KR: "South Korea", IN: "India", PR: "Puerto Rico",
+  CO: "Colombia", FR: "France", ID: "Indonesia", SE: "Sweden", AR: "Argentina", DE: "Germany", AU: "Australia", JP: "Japan",
+  PH: "Philippines", ES: "Spain", IT: "Italy", CL: "Chile", DO: "Dominican Rep.", IE: "Ireland", NO: "Norway", NL: "Netherlands",
+  EC: "Ecuador", VE: "Venezuela", PE: "Peru", AL: "Albania", NZ: "New Zealand", ZA: "South Africa", NG: "Nigeria", JM: "Jamaica",
+  BE: "Belgium", DK: "Denmark", PK: "Pakistan", CN: "China", TW: "Taiwan", TH: "Thailand", PT: "Portugal", PL: "Poland", TR: "Turkey" };
+const cname = (c) => c ? (COUNTRY[c] || c) : "Unknown";
+
+/* ---------- Summary ---------- */
+const mAge = D.models.find((m) => m.model === "age only");
+const mBest = D.models.reduce((a, b) => (b.cv_r2 > a.cv_r2 ? b : a));
+const clear = D.effects.filter((e) => e.padj < 0.05).sort((a, b) => b.e - a.e);
+const audio = D.effects.filter((e) => e.group === "Audio");
+const audioMax = Math.max(...audio.map((e) => Math.abs(e.e)));
+const lead = clear[0];
+$("#lede").textContent =
+  `${D.songs.length} of Spotify's most-streamed songs, with release dates, genres, artist countries and audio features added. ` +
+  `The question: once you know how long ago a song came out, does anything else tell you how fast it is still growing?`;
+$("#findings").innerHTML = [
+  { big: Math.round(mAge.cv_r2 * 100) + "%", what: "explained by release age alone",
+    why: "On artists the model never saw. Newer songs grow faster, and that one fact does most of the work." },
+  lead
+    ? { big: pct(lead.e), what: `${clear.map((e) => e.term).join(" and ")} vs pop of the same age`,
+        why: clear.length === 1
+          ? "The only factor whose effect holds up after adjusting for testing ~30 factors at once."
+          : `The only ${clear.length === 2 ? "two" : clear.length} factors whose effects hold up after adjusting for testing ~30 factors at once.` }
+    : { big: "0", what: "factors beyond age hold up", why: "None survives the adjustment for testing ~30 factors at once." },
+  { big: "±" + Math.round(audioMax) + "%", what: "largest audio-feature effect", why: "Danceability, energy, mood and tempo barely move growth. None holds up after the same adjustment." },
+].map((f) => `<div class="finding"><span class="big num">${esc(f.big)}</span><span class="what">${esc(f.what)}</span><span class="why">${esc(f.why)}</span></div>`).join("");
+
+/* ---------- Scatter ---------- */
+const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true;
+const sc = $("#scatter"); sc.appendChild(tip);
+let hlTerm = "";
+function drawScatter() {
+  const W = Math.max(300, sc.clientWidth), H = W < 560 ? 300 : 400;
+  const m = { l: 46, r: 12, t: 10, b: 34 };
+  const ages = D.songs.map((s) => s.age), vs = D.songs.map((s) => s.v);
+  const x0 = Math.log(20), x1 = Math.log(Math.max(...ages) * 1.15);
+  const y0 = Math.log(Math.min(...vs) * 0.8), y1 = Math.log(Math.max(...vs) * 1.25);
+  const X = (a) => m.l + ((Math.log(a) - x0) / (x1 - x0)) * (W - m.l - m.r);
+  const Y = (v) => H - m.b - ((Math.log(v) - y0) / (y1 - y0)) * (H - m.t - m.b);
+  const xt = [[30, "1 mo"], [91, "3 mo"], [182, "6 mo"], [365, "1 yr"], [730, "2 yr"], [1826, "5 yr"], [3652, "10 yr"], [7305, "20 yr"]]
+    .filter(([a]) => Math.log(a) > x0 && Math.log(a) < x1 && (W > 480 || ![91, 1826].includes(a)));
+  const yt = [0.01, 0.03, 0.1, 0.3, 1].filter((v) => Math.log(v) > y0 && Math.log(v) < y1);
+  const q = hlTerm.toLowerCase();
+  const isHl = (s) => q && (s.a.toLowerCase().includes(q) || s.t.toLowerCase().includes(q));
+  let g = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Scatter of growth rate against time since release">`;
+  yt.forEach((v) => { g += `<line x1="${m.l}" x2="${W - m.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--grid)"/><text x="${m.l - 6}" y="${Y(v) + 4}" text-anchor="end">${v}%</text>`; });
+  xt.forEach(([a, l]) => { g += `<line x1="${X(a)}" x2="${X(a)}" y1="${m.t}" y2="${H - m.b}" stroke="var(--grid)"/><text x="${X(a)}" y="${H - m.b + 18}" text-anchor="middle">${l}</text>`; });
+  g += `<line x1="${m.l}" x2="${W - m.r}" y1="${H - m.b}" y2="${H - m.b}" stroke="var(--axis)"/>`;
+  D.songs.forEach((s) => { if (!isHl(s)) g += `<circle cx="${X(s.age)}" cy="${Y(s.v)}" r="3.5" fill="var(--series)" fill-opacity="0.5" stroke="var(--surface)" stroke-width="0.8"/>`; });
+  g += `<path d="${D.curve.map(([a, v], i) => (i ? "L" : "M") + X(a).toFixed(1) + "," + Y(v).toFixed(1)).join("")}" fill="none" stroke="var(--ink)" stroke-width="2.25" stroke-linejoin="round"/>`;
+  const hits = D.songs.filter(isHl);
+  hits.forEach((s) => { g += `<circle cx="${X(s.age)}" cy="${Y(s.v)}" r="5.5" fill="var(--hl)" stroke="var(--surface)" stroke-width="2"/>`; });
+  g += `<circle id="sc-focus" r="7" fill="none" stroke="var(--ink)" stroke-width="2" visibility="hidden"/>`;
+  g += `<text x="${m.l}" y="${H - 2}" style="fill:var(--muted)">Time since release →</text></svg>`;
+  sc.querySelector("svg")?.remove();
+  sc.insertAdjacentHTML("afterbegin", g);
+  $("#hl-key").hidden = !q;
+  $("#hl-label").textContent = q ? `Matches “${hlTerm}” (${hits.length})` : "";
+  const svg = sc.querySelector("svg"), focus = svg.querySelector("#sc-focus");
+  const pts = D.songs.map((s) => [X(s.age), Y(s.v), s]);
+  svg.onpointermove = (ev) => {
+    const r = svg.getBoundingClientRect(), k = W / r.width;
+    const px = (ev.clientX - r.left) * k, py = (ev.clientY - r.top) * k;
+    let best = null, bd = 18 * 18;
+    for (const p of pts) { const d = (p[0] - px) ** 2 + (p[1] - py) ** 2; if (d < bd) { bd = d; best = p; } }
+    if (!best) { tip.hidden = true; focus.setAttribute("visibility", "hidden"); return; }
+    const s = best[2];
+    focus.setAttribute("cx", best[0]); focus.setAttribute("cy", best[1]); focus.setAttribute("visibility", "visible");
+    tip.innerHTML = `<b>${esc(s.t)}</b>${esc(s.a)}<br><span class="k">Out for</span> ${ageText(s.age)}<br>` +
+      `<span class="k">Daily share</span> <span class="num">${s.v.toFixed(3)}%</span><br>` +
+      `<span class="k">Vs expected</span> <span class="num">${pct(s.x)}</span>`;
+    tip.hidden = false;
+    const left = best[0] / k + 14, top = best[1] / k - 10;
+    tip.style.left = Math.min(left, r.width - tip.offsetWidth - 4) + "px";
+    tip.style.top = Math.max(0, top) + "px";
+  };
+  svg.onpointerleave = () => { tip.hidden = true; focus.setAttribute("visibility", "hidden"); };
+}
+$("#hl-search").addEventListener("input", (e) => { hlTerm = e.target.value.trim(); drawScatter(); });
+
+/* ---------- Forest ---------- */
+function drawForest() {
+  const lo = -70, hi = 130;
+  const P = (v) => ((Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo)) * 100;
+  const order = ["Genre", "Artist from", "Released as", "Song & artist", "Audio"];
+  const titles = { "Genre": "Genre (vs pop)", "Artist from": "Artist from (vs US)", "Released as": "Released as (vs album track)", "Song & artist": "Song & artist", "Audio": "Audio features (per 1 SD)" };
+  let h = "";
+  order.forEach((grp) => {
+    const rows = D.effects.filter((e) => e.group === grp).sort((a, b) => b.e - a.e);
+    if (!rows.length) return;
+    h += `<div class="f-group">${esc(titles[grp])}</div>`;
+    rows.forEach((e) => {
+      const c = e.padj < 0.05 ? " clear" : "";
+      const label = e.term.replace(" (+1 SD)", "");
+      h += `<div class="f-row" title="${esc(label)}: ${pct(e.e)} (95% range ${pct(e.lo)} to ${pct(e.hi)}), adjusted p = ${e.padj.toFixed(3)}">` +
+        `<span class="f-label">${esc(label)}</span><span class="f-lane"><span class="f-zero" style="left:${P(0)}%"></span>` +
+        `<span class="f-ci" style="left:${P(e.lo)}%;width:${P(e.hi) - P(e.lo)}%"></span><span class="f-dot${c}" style="left:${P(e.e)}%"></span></span>` +
+        `<span class="f-val${c}">${pct(e.e)}</span></div>`;
+    });
+  });
+  h += `<div class="f-axis"><span></span><span class="f-ticks">${[-50, 0, 50, 100].map((t) => `<span style="left:${P(t)}%">${t > 0 ? "+" : ""}${t}%</span>`).join("")}</span><span></span></div>`;
+  $("#forest").innerHTML = h;
+}
+$("#forest-intro").textContent =
+  `Each row compares songs of the same age that differ in one way, holding the other factors fixed. ` +
+  (clear.length
+    ? `Only ${clear.map((e) => e.term).join(" and ")} clearly stand${clear.length === 1 ? "s" : ""} apart. `
+    : `None of them clearly stands apart. `) +
+  `The rest sit near zero or have ranges too wide to tell. Adding all of them doesn't improve predictions for unseen artists.`;
+$("#models").innerHTML = D.models.map((m) =>
+  `<tr><td>${esc(m.model)}</td><td class="r num">${m.n}</td><td class="r num">${m.r2.toFixed(2)}</td><td class="r num">${m.cv_r2.toFixed(2)}</td></tr>`).join("");
+
+/* ---------- Explorer ---------- */
+const genres = [...new Set(D.songs.map((s) => s.g).filter(Boolean))].sort();
+const countries = [...new Set(D.songs.map((s) => s.c).filter(Boolean))].sort((a, b) => cname(a).localeCompare(cname(b)));
+$("#genre").innerHTML = `<option value="">All genres</option>` + genres.map((g) => `<option>${esc(g)}</option>`).join("");
+$("#country").innerHTML = `<option value="">All countries</option>` + countries.map((c) => `<option value="${esc(c)}">${esc(cname(c))}</option>`).join("");
+let limit = 40;
+const maxX = 300;
+function drawRows() {
+  const q = $("#q").value.trim().toLowerCase(), g = $("#genre").value, c = $("#country").value, sort = $("#sort").value;
+  let rows = D.songs.filter((s) => (!q || s.t.toLowerCase().includes(q) || s.a.toLowerCase().includes(q)) && (!g || s.g === g) && (!c || s.c === c));
+  const by = { ahead: (a, b) => b.x - a.x, behind: (a, b) => a.x - b.x, streams: (a, b) => b.s - a.s, newest: (a, b) => a.age - b.age };
+  rows.sort(by[sort]);
+  const shown = rows.slice(0, limit);
+  $("#rows").innerHTML = shown.map((s) => {
+    // Bars on a log-ratio scale so +100% and −50% (both a 2× gap) are drawn the same length
+    const lr = Math.log(1 + s.x / 100), w = Math.min(100, (Math.abs(lr) / Math.log(1 + maxX / 100)) * 100);
+    const bar = lr >= 0 ? `<i></i><i class="pos" style="width:${w}%"></i>` : `<i class="neg" style="width:${w}%"></i><i></i>`;
+    return `<tr><td class="song"><b>${esc(s.t)}</b><span>${esc(s.a)}</span></td><td>${esc(s.g || "—")}</td><td>${esc(cname(s.c))}</td>` +
+      `<td class="num" style="white-space:nowrap">${esc(s.d)}${s.src === "musicbrainz" ? `<span class="flag" title="Original release date from MusicBrainz; Deezer listed a later reissue">orig.</span>` : ""}</td>` +
+      `<td class="r num">${s.v.toFixed(3)}%</td><td class="r"><span class="dvcell"><span class="dv" aria-hidden="true">${bar}</span><span class="num">${pct(s.x)}</span></span></td></tr>`;
+  }).join("") || `<tr><td colspan="6" class="count">No songs match. Clear the search or pick “All genres”.</td></tr>`;
+  $("#count").textContent = `Showing ${shown.length} of ${rows.length} songs`;
+  $("#more").hidden = shown.length >= rows.length;
+}
+["q", "genre", "country", "sort"].forEach((id) => $("#" + id).addEventListener("input", () => { limit = 40; drawRows(); }));
+$("#more").addEventListener("click", () => { limit += 40; drawRows(); });
+
+$("#data-notes").innerHTML = [
+  `${D.songs.length} songs with a known release date, from a list of 730 with 100M+ Spotify streams.`,
+  `Release date, genre, length, explicit flag and format from Deezer. ${D.dates_fixed} reissue dates replaced with the original release from MusicBrainz.`,
+  `Artist country and solo/group from MusicBrainz. Audio features from ReccoBeats, matched by ISRC.`,
+  `Growth = today's streams ÷ all-time streams. "Vs expected" compares that to the typical value for a song of the same age.`,
+].map((t) => `<li>${esc(t)}</li>`).join("");
+
+drawScatter(); drawForest(); drawRows();
+let rz; new ResizeObserver(() => { clearTimeout(rz); rz = setTimeout(drawScatter, 80); }).observe(sc);
+</script>
