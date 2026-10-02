@@ -1,46 +1,44 @@
 # What makes a song rise?
 
-Enriches Spotify's 730 most-streamed songs (snapshot July 2026) with metadata and audio features, then tests what predicts how fast a song is still gaining streams once release age is accounted for.
+An analysis of Spotify's 730 most-streamed songs (snapshot July 2026). The question: once you know how long ago a song came out, does anything else predict how fast it is still gaining streams?
 
-## Findings
+## What we found
 
-- Release age explains about half the variation in growth (out-of-sample R² 0.52 on held-out artists).
-- Beyond age, only country and Latin music clearly stand out: each grows about 52% faster than pop of the same age.
-- Audio features, explicit content, collaborations and release format show no reliable effect.
+- **Release age is the main driver.** Newer songs gain streams much faster, and growth drops for about 3 years after release before levelling off. Age alone explains about half the difference between songs, even for artists the model had never seen.
+- **Country and Latin music stand out.** Beyond age, these are the only two genres that clearly grow faster: about 52% faster than pop songs of the same age.
+- **Most other things don't matter.** How a song sounds (danceability, energy, mood, tempo), explicit lyrics, collaborations, and singles vs album tracks had no reliable effect.
+
+Limits: every song already has 100M+ streams, so this describes hits, not songs in general. It's a single snapshot, not a trend over time.
 
 ![Growth vs release age](reports/velocity_vs_age.png)
 ![Effects beyond release age](reports/effects.png)
 
-Full tables in [reports/results.md](reports/results.md).
+Full tables are in [reports/results.md](reports/results.md).
 
-## Run
+## What we used
+
+**Data**
+- The Spotify CSV: total and daily streams for 730 songs.
+- Deezer: release date, genre, song length, explicit flag, single or album.
+- MusicBrainz: original release date (replaces reissue dates), artist country, solo or group.
+- ReccoBeats: audio features (danceability, energy, mood, tempo).
+
+**Tools:** Python, pandas, statsmodels, scikit-learn, matplotlib.
+
+**Method:** Growth speed is today's streams divided by all-time streams. A regression model compares songs of the same age that differ in one way. Songs by the same artist are grouped, results are adjusted for testing many factors at once, and the model is tested on artists it hasn't seen.
+
+## Run it
 
 ```bash
-python3 enrich.py    # ~15 min first time (MusicBrainz is rate-limited to 1 req/s); seconds after, from cache/
-python3 analyze.py   # model, charts, and reports/dashboard.html
+python3 enrich.py    # first run takes ~15 min (API rate limits), then it's cached
+python3 analyze.py   # runs the model, makes the charts and an interactive dashboard
 ```
 
 Needs `pandas`, `requests`, `statsmodels`, `scikit-learn`, `matplotlib`. No API keys.
 
-## Data sources
+## Files
 
-| Source | Adds |
-|---|---|
-| Deezer | release date, genre, label, single/album/EP, length, explicit, ISRC |
-| MusicBrainz | original release date (replaces reissue dates), artist country, solo/group |
-| ReccoBeats | audio features (danceability, energy, valence, tempo, ...) by ISRC |
-
-## Outputs
-
-- `data/spotify_2025_enriched.csv`: one row per song, 40+ columns
-- `reports/results.md`: model comparison and effect tables
-- `reports/*.png`: static charts
-- Generated locally, not committed: `reports/dashboard.html` (interactive dashboard built from `dashboard_template.html`) and `reports/songs_with_residuals.csv` (each song's growth vs the expected pace for its age)
-
-## Method notes
-
-- Growth = daily streams ÷ all-time streams, modelled on a log scale.
-- Release age enters as a spline (growth falls for ~3 years, then flattens).
-- Standard errors are clustered by artist; p-values are Holm-adjusted for testing ~30 factors.
-- Out-of-sample R² holds out whole artists at a time.
-- Release dates: the earlier of Deezer and MusicBrainz, with an ISRC-year check to reject same-title mismatches. Four verified reissues are listed in `VERIFIED_REISSUES` in `enrich.py`.
+- `enrich.py`: adds the Deezer, MusicBrainz and ReccoBeats data
+- `analyze.py`: the model, charts and dashboard
+- `data/`: the original and enriched CSVs
+- `reports/`: results table and charts
