@@ -47,6 +47,8 @@ Both ports are only reachable from your own computer.
 
 ## Testing
 
+`python3 checks.py` runs a 12-point smoke test (data matches the CSVs, model results are as reported, the agent's login is read-only). Run it after `./start.sh` and after any change to the database setup.
+
 `python3 query.py "SELECT count() FROM spotify.songs"` runs SQL through the tool server the same way the agent does. See `example-questions.md` for checked questions.
 
 ## Start and stop

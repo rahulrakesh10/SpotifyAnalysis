@@ -20,16 +20,25 @@ def post(body, session=None):
     return resp.headers.get("mcp-session-id"), resp.read().decode()
 
 
-def main(queries):
+def run(queries):
+    """Run each SQL string through the tool server. Returns a list of (ok, parsed_or_error_text)."""
     session, _ = post({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {
         "protocolVersion": "2025-03-26", "capabilities": {}, "clientInfo": {"name": "query.py", "version": "0"}}})
     post({"jsonrpc": "2.0", "method": "notifications/initialized"}, session)
+    results = []
     for sql in queries:
         _, text = post({"jsonrpc": "2.0", "id": 2, "method": "tools/call",
                         "params": {"name": "run_query", "arguments": {"query": sql}}}, session)
         data = next(l[6:] for l in text.splitlines() if l.startswith("data: "))
         result = json.loads(data)["result"]
-        print(("ERROR: " if result.get("isError") else "") + result["content"][0]["text"][:800])
+        body = result["content"][0]["text"]
+        results.append((False, body) if result.get("isError") else (True, json.loads(body)))
+    return results
+
+
+def main(queries):
+    for ok, body in run(queries):
+        print(json.dumps(body, ensure_ascii=False)[:800] if ok else "ERROR: " + body[:800])
 
 
 if __name__ == "__main__":
