@@ -31,7 +31,7 @@ Full tables are in [reports/results.md](reports/results.md).
 
 ```bash
 python3 enrich.py    # first run takes ~15 min (API rate limits), then it's cached
-python3 analyze.py   # runs the model, makes the charts and an interactive dashboard
+python3 analyze.py   # runs the model, makes the charts and result tables
 ```
 
 Needs `pandas`, `requests`, `statsmodels`, `scikit-learn`, `matplotlib`. No API keys.
@@ -39,6 +39,6 @@ Needs `pandas`, `requests`, `statsmodels`, `scikit-learn`, `matplotlib`. No API 
 ## Files
 
 - `enrich.py`: adds the Deezer, MusicBrainz and ReccoBeats data
-- `analyze.py`: the model, charts and dashboard
-- `data/`: the original and enriched CSVs
+- `analyze.py`: the model, charts and result tables
+- `data/`: the original and enriched CSVs, plus the model results (`model_effects.csv`, `model_comparison.csv`, `song_growth.csv`)
 - `reports/`: results table and charts

@@ -3,3 +3,5 @@ __pycache__/
 .DS_Store
 reports/dashboard.html
 reports/songs_with_residuals.csv
+agent/.env
+agent/librechat/

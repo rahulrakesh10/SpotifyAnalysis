@@ -3,7 +3,8 @@
 Outcome ("velocity"): daily streams as a share of all-time streams (daily_stream_share_pct),
 modelled on the log scale so coefficients read as % differences.
 
-Writes reports/results.md, charts, and reports/dashboard.html (built from dashboard_template.html).
+Writes reports/results.md and charts, plus CSVs in data/ (loaded into ClickHouse by agent/).
+Also builds reports/dashboard.html when dashboard_template.html is present.
 """
 import json
 from pathlib import Path
@@ -208,8 +209,31 @@ def main():
     df.to_csv(REPORTS / "songs_with_residuals.csv", index=False)
     chart_age(df)
     chart_effects(eff)
-    build_dashboard(df, eff, model_rows, age_model)
+    export_tables(df, eff, model_rows, age_model)
+    if (ROOT / "dashboard_template.html").exists():
+        build_dashboard(df, eff, model_rows, age_model)
     print("\n".join(out))
+
+
+def export_tables(df, eff, model_rows, age_model):
+    """CSVs the ClickHouse agent loads: effects, model comparison, and each song's growth vs expected."""
+    data = ROOT / "data"
+    group = lambda t: t.split(":")[0] if ":" in t else "Song & artist"
+    out = eff.assign(
+        factor=eff["term"].map(lambda t: t.split(": ", 1)[-1]),
+        factor_group=eff["term"].map(group),
+        clear_after_adjustment=(eff["p_adj"] < 0.05).astype(int),
+    )[["factor_group", "factor", "effect_pct", "lo_pct", "hi_pct", "p", "p_adj", "clear_after_adjustment"]]
+    out = out.rename(columns={"lo_pct": "ci_low_pct", "hi_pct": "ci_high_pct", "p": "p_value", "p_adj": "p_value_adjusted"})
+    out.round(4).to_csv(data / "model_effects.csv", index=False)
+    pd.DataFrame(model_rows).rename(columns={"n": "songs", "r2": "r_squared", "cv_r2": "r_squared_unseen_artists"}) \
+        .to_csv(data / "model_comparison.csv", index=False)
+    pd.DataFrame({
+        "rank": df["rank"], "track": df["track"], "artist": df["artist"],
+        "growth_pct": df["daily_stream_share_pct"],
+        "expected_growth_pct": np.exp(age_model.fittedvalues),  # typical growth for a song this age
+        "vs_expected_pct": df["vs_expected_pct"],
+    }).round(4).to_csv(data / "song_growth.csv", index=False)
 
 
 def build_dashboard(df, eff, model_rows, age_model):

@@ -1,0 +1,5 @@
+model,songs,r_squared,r_squared_unseen_artists
+age only,707,0.537,0.516
+age + metadata,707,0.59,0.488
+age + metadata + audio,621,0.587,0.442
+age + metadata (audio subset),621,0.575,0.436

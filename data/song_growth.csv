@@ -1,0 +1,708 @@
+rank,track,artist,growth_pct,expected_growth_pct,vs_expected_pct
+1,Ordinary,Alex Warren,0.1198,0.0869,37.8019
+2,DtMF,Bad Bunny,0.1578,0.1034,52.6279
+3,Golden,HUNTR/X,0.1299,0.1615,-19.5844
+4,BAILE INoLVIDABLE,Bad Bunny,0.169,0.1034,63.4608
+5,The Fate of Ophelia,Taylor Swift,0.2137,0.2485,-13.9958
+6,NUEVAYoL,Bad Bunny,0.1787,0.1034,72.8429
+7,Man I Need,Olivia Dean,0.2644,0.1999,32.2336
+8,EoO,Bad Bunny,0.1633,0.1034,57.9476
+9,La Plena,W Sound,0.1283,0.114,12.5665
+10,VOY A LLeVARTE PA PR,Bad Bunny,0.1308,0.1034,26.5129
+11,Manchild,Sabrina Carpenter,0.2014,0.1535,31.2176
+12,Clean Baby Sleep White Noise (Loopable no fade),Dream Supplier,0.2879,0.0454,533.5174
+13,undressed,sombr,0.1434,0.1227,16.8696
+14,Don’t Say You Love Me,Jin,0.0968,0.1439,-32.734
+15,VeLDÁ,Bad Bunny,0.1336,0.1034,29.2211
+16,like JENNIE,JENNIE,0.1115,0.1184,-5.8572
+17,Sports car,Tate McRae,0.0935,0.1069,-12.5025
+18,So Easy (To Fall In Love),Olivia Dean,0.2992,0.2405,24.4291
+19,Gabriela,KATSEYE,0.1728,0.1615,6.9731
+20,WHERE IS MY HUSBAND!,RAYE,0.2933,0.2328,25.9698
+21,DAISIES,Justin Bieber,0.279,0.1742,60.1166
+22,Abracadabra,Lady Gaga,0.0797,0.1099,-27.4855
+23,No Broke Boys,Disco Lines,0.2153,0.154,39.8072
+24,Soda Pop,Saja Boys,0.0908,0.1615,-43.7896
+25,Opalite,Taylor Swift,0.2078,0.2485,-16.3703
+26,Your Idol,Saja Boys,0.0738,0.161,-54.1541
+27,TU SANCHO,Fuerza Regida,0.3132,0.1379,127.1308
+28,Marlboro Rojo,Fuerza Regida,0.2315,0.1379,67.8825
+29,12 to 12,sombr,0.2634,0.1831,43.875
+30,Te Quería Ver,Alemán,0.0894,0.1092,-18.1215
+31,Just Keep Watching (From F1® The Movie),Tate McRae,0.1633,0.1505,8.519
+32,KLOuFRENS,Bad Bunny,0.1518,0.1034,46.8246
+33,Show Me Love,WizTheMc,0.1445,0.1109,30.307
+34,How It’s Done,HUNTR/X,0.0931,0.161,-42.1646
+35,no tiene sentido,Beéle,0.1395,0.1435,-2.7596
+36,JUMP,BLACKPINK,0.1309,0.1742,-24.8772
+37,NOKIA,Drake,0.0899,0.1127,-20.2067
+38,Raindance,Dave,0.4543,0.2737,65.9658
+39,What It Sounds Like,HUNTR/X,0.0953,0.161,-40.7979
+40,Morena,Neton Vega,0.0902,0.1127,-19.9404
+41,I Really Like You,Carly Rae Jepsen,0.0392,0.0435,-9.943
+42,Bullet With Butterfly Wings,The Smashing Pumpkins,0.0541,0.0523,3.4016
+43,Anxiety,Doechii,0.093,0.1179,-21.0904
+44,Stateside + Zara Larsson,PinkPantheress,0.4535,0.2569,76.5225
+45,WELTiTA,Bad Bunny,0.1262,0.1034,22.0636
+46,Mystical Magical,Benson Boone,0.1479,0.1347,9.8085
+47,Gnarly,KATSEYE,0.1521,0.1371,10.9589
+48,Revolving door,Tate McRae,0.107,0.1142,-6.3407
+49,Takedown,HUNTR/X,0.0997,0.161,-38.0645
+50,Por Esos Ojos,Fuerza Regida,0.1525,0.1104,38.1368
+51,TU VAS SIN (fav),Rels B,0.2031,0.1615,25.7306
+52,Folded,Kehlani,0.216,0.1566,37.9218
+53,Nice To Each Other,Olivia Dean,0.2068,0.1505,37.4264
+54,Die On This Hill,SIENNA SPIRO,0.3357,0.2557,31.2984
+55,En Privado,Xavi,0.1367,0.1106,23.5492
+56,Tears,Sabrina Carpenter,0.1545,0.2121,-27.1666
+57,QLOO*,Young Cister,0.1826,0.1467,24.5128
+58,YO y TÚ,Ovy On The Drums,0.1699,0.1566,8.4857
+59,Shake It To The Max (FLY),MOLIY,0.1002,0.0971,3.2231
+60,bergema sampai selamanya,Nadhif Basalamah,0.1997,0.1092,82.8987
+61,Azizam,Ed Sheeran,0.1121,0.1273,-11.9667
+62,P do Pecado,Grupo Menos É Mais,0.1247,0.1371,-9.0297
+63,Finding Her,Kushagra,0.169,0.1087,55.4585
+64,Busy Woman,Sabrina Carpenter,0.1142,0.0834,36.9366
+65,ANSIEDAD,Fuerza Regida,0.214,0.1379,55.1916
+67,Dracula,Tame Impala,0.4837,0.2382,103.0302
+68,VITAMINA,Jombriel,0.0902,0.1162,-22.3451
+69,Choosin' Texas,Ella Langley,0.6897,0.2658,159.5076
+70,I'm The Problem,Morgan Wallen,0.1795,0.1092,64.3982
+71,2+2,Omar Camacho,0.1442,0.1661,-13.1933
+72,TATTOO,Tito Double P,0.1163,0.1162,0.1249
+73,Sorry I'm Here For Someone Else,Benson Boone,0.1241,0.1162,6.8401
+74,What I Want,Morgan Wallen,0.1769,0.1439,22.9272
+75,Dark Thoughts,Lil Tecca,0.105,0.1205,-12.8808
+76,Tubarões,Diego & Victor Hugo,0.1116,0.1246,-10.4624
+77,PERFuMITO NUEVO,Bad Bunny,0.1045,0.1034,1.0749
+78,Fame is a Gun,Addison Rae,0.2222,0.1505,47.6603
+79,YUKON,Justin Bieber,0.2489,0.1742,42.8423
+80,Eternity,Alex Warren,0.1427,0.1782,-19.9325
+81,Cry For Me,The Weeknd,0.1064,0.1092,-2.5517
+82,7 DIAS,Gabito Ballesteros,0.0741,0.1089,-31.9857
+83,When Did You Get Hot?,Sabrina Carpenter,0.166,0.2121,-21.7454
+84,POR SUS BESOS,Tito Double P,0.2288,0.1742,31.3071
+85,Sugar On My Tongue,"Tyler, The Creator",0.1055,0.181,-41.7024
+86,COMO CAPO,Clave Especial,0.1286,0.1142,12.5663
+87,CAFé CON RON,Bad Bunny,0.1998,0.1034,93.2513
+88,Sapphire,Ed Sheeran,0.1028,0.1535,-33.023
+89,Born Again,LISA,0.0695,0.1106,-37.1861
+90,DIE TRYING,PARTYNEXTDOOR,0.1517,0.1127,34.6457
+91,I Got Better,Morgan Wallen,0.2762,0.1439,91.9304
+92,Frecuencia,Los Dareyes De La Sierra,0.1753,0.1535,14.2128
+93,CHANEL,Tyla,0.1554,0.2751,-43.5096
+94,M&M,Neton Vega,0.0799,0.1127,-29.0824
+95,Elizabeth Taylor,Taylor Swift,0.163,0.2485,-34.4002
+96,Perlas Negras,Natanael Cano,0.1765,0.168,5.078
+97,Blessings,Calvin Harris,0.2065,0.1408,46.6269
+98,Cuando No Era Cantante,El Bogueto,0.5928,0.0868,582.8944
+99,Crystalised,The xx,0.029,0.0459,-36.8384
+100,Amigos? No.,Oscar Maydon,0.0959,0.1181,-18.8292
+101,si te pillara,Beéle,0.1339,0.1435,-6.6632
+102,Vita Fer,Los Dareyes De La Sierra,0.0924,0.1246,-25.8667
+103,Who Knows,Daniel Caesar,0.3783,0.2751,37.5182
+104,Pvta Luna,Neton Vega,0.3364,0.2405,39.8996
+105,SPIDER,GIMS,0.0763,0.073,4.4752
+106,Just In Case,Morgan Wallen,0.1251,0.1227,1.9553
+107,Phantom,EsDeeKid,0.1996,0.1184,68.5282
+108,Killin' It Girl,j-hope,0.0921,0.1577,-41.5905
+109,ExtraL,JENNIE,0.0717,0.1145,-37.3865
+110,Bloodline,Alex Warren,0.1856,0.1467,26.5585
+111,Verano Rosa,KAROL G,0.1625,0.1599,1.6506
+112,TURiSTA,Bad Bunny,0.1228,0.1034,18.7751
+113,La Perla,ROSALÍA,0.1841,0.2952,-37.6278
+114,"TAKEDOWN (JEONGYEON, JIHYO, CHAEYOUNG) (from the Netflix film KPop Demon Hunters)",TWICE,0.0812,0.1615,-49.7325
+115,The Subway,Chappell Roan,0.1373,0.065,111.1554
+116,FAMOSINHA,Dj Caio Vieira,0.0815,0.1164,-30.0035
+117,TU TU TU,Clave Especial,0.1084,0.1142,-5.1152
+118,Father Figure,Taylor Swift,0.1104,0.2485,-55.5692
+119,KETU TeCRÉ,Bad Bunny,0.1176,0.1034,13.7455
+120,Midnight Sun,Zara Larsson,0.5647,0.1577,258.1307
+121,BOKeTE,Bad Bunny,0.1168,0.1034,12.9717
+122,A Couple Minutes,Olivia Dean,0.2743,0.2405,14.0739
+123,Casanova,Soolking,0.0391,0.058,-32.5613
+124,TIT FOR TAT,Tate McRae,0.13,0.1145,13.5251
+125,Rein Me In,Sam Fender,0.5513,0.1145,381.4339
+126,4 Raws,EsDeeKid,0.2513,0.1615,55.5692
+127,LA MuDANZA,Bad Bunny,0.1752,0.1034,69.4576
+128,YOGURCITO REMIX,Blessd,0.2698,0.2094,28.8348
+129,White Keys,Dominic Fike,0.7482,0.306,144.5474
+130,RATHER LIE,Playboi Carti,0.092,0.1205,-23.667
+131,Chiquita,Neton Vega,0.0543,0.1127,-51.8045
+132,Lose My Mind,Don Toliver,0.1709,0.1371,24.6738
+133,CHAVALITAS,Fuerza Regida,0.3519,0.1379,155.1958
+134,Sedia Aku Sebelum Hujan,Idgitaf,0.2449,0.2545,-3.7552
+135,Show Me Love,WizTheMc,0.1797,0.1109,62.0496
+136,MONTAGEM XONADA,MXZI,0.1462,0.1686,-13.2752
+137,DIA DELÍCIA,Nakama,0.1051,0.1026,2.4712
+138,"Tonight, Tonight",The Smashing Pumpkins,0.065,0.0527,23.3893
+139,Coleccionando Heridas,KAROL G,0.2213,0.1615,36.9974
+140,Nobody’s Son,Sabrina Carpenter,0.2255,0.2121,6.3038
+141,TABOLA BALE,Silet Open Up,0.0923,0.1273,-27.5158
+142,top diesel,Beéle,0.1279,0.1435,-10.8456
+143,Wish I Knew You,The Revivalists,0.0487,0.0434,12.254
+144,twilight zone,Ariana Grande,0.1092,0.1246,-12.3879
+145,Apaguei pra todos,Ferrugem,0.0937,0.0659,42.1967
+146,Garam & Madu (Sakit Dadaku),Tenxi,0.0557,0.1002,-44.4082
+147,dopamina,Peso Pluma,0.3348,0.3798,-11.8372
+148,Ya Borracho,Herencia De Grandes,0.3824,0.2952,29.5553
+149,SOLEAO,Myke Towers,0.1815,0.15,21.0072
+150,Chula Vente,Luis R Conriquez,0.145,0.1831,-20.7977
+151,Wi$h Li$t,Taylor Swift,0.1191,0.2485,-52.0679
+152,Real Man,beabadoobee,0.0911,0.0812,12.2066
+154,LATINA FOREVA,KAROL G,0.1897,0.1467,29.3543
+155,The Life of a Showgirl,Taylor Swift,0.1147,0.2485,-53.8386
+156,MONA LISA,j-hope,0.0944,0.1227,-23.0649
+157,Gameboy,KATSEYE,0.2322,0.1656,40.2381
+158,daño,Peso Pluma,0.5627,0.3798,48.1757
+159,Balanço da Rede,Matheus Fernandes,0.0101,0.0474,-78.6732
+160,House Tour,Sabrina Carpenter,0.3275,0.2121,54.3879
+161,LUNA BALA,Yb Wasg'ood,0.0991,0.1324,-25.1442
+162,Siren sounds (bonus),Tate McRae,0.1448,0.1145,26.4495
+163,EVIL J0RDAN,Playboi Carti,0.0862,0.0657,31.1273
+164,IRIS OUT,Kenshi Yonezu,0.1828,0.2286,-20.051
+165,For A Reason,Karan Aujla,0.1638,0.2059,-20.442
+166,Triple Lavada,Esau Ortiz,0.1009,0.125,-19.2609
+167,quédate,Beéle,0.1218,0.1435,-15.0977
+168,111,Yan Block,0.1671,0.1142,46.2661
+169,We Hug Now,Sydney Rose,0.1279,0.1124,13.7816
+170,SPAGHETTI,LE SSERAFIM,0.1924,0.2751,-30.0595
+171,kota ini tak sama tanpamu,Nadhif Basalamah,0.3955,0.1615,144.8372
+172,"Phir Mohabbat (From ""Murder 2"")",Mohammed Irfan,0.1021,0.0449,127.2461
+173,Haseen,Talwiinder,0.1283,0.1151,11.5135
+174,caperuza,Fuerza Regida,0.3504,0.1379,154.1081
+175,Presepada,Marília Mendonça,0.0181,0.0475,-61.868
+176,LA VILLA,Ryan Castro,0.4259,0.2737,55.5906
+177,wgft,Gunna,0.2334,0.1935,20.6131
+178,Beautiful People,David Guetta,0.1398,0.1184,18.0373
+179,Good News,Shaboozey,0.138,0.094,46.7556
+180,Insomnia (Monster Mix),Faithless,0.0599,0.0522,14.6462
+181,Illegal,PinkPantheress,0.2029,0.1408,44.0707
+182,Ilusão De Ótica,Matheus & Kauan,0.158,0.1075,46.9156
+183,Penyangkalan,For Revenge,0.2935,0.3525,-16.7426
+184,"Sally, When The Wine Runs Out",ROLE MODEL,0.1747,0.0791,120.9909
+185,Wood,Taylor Swift,0.0975,0.2485,-60.7608
+186,Afsos,Anuv Jain,0.1051,0.1092,-3.7423
+187,Victory Lap,Fred again..,0.2011,0.1604,25.3617
+188,Eu Me Apaixonei,Vitinho Imperador,0.2007,0.1162,72.7865
+189,Mi Vida Mi Muerte,Neton Vega,0.1291,0.1066,21.0678
+190,Actually Romantic,Taylor Swift,0.1039,0.2485,-58.1851
+191,Lover Girl,Laufey,0.284,0.1644,72.7472
+192,Shiny,Easykid,0.1212,0.1566,-22.6106
+193,All The Way,BigXthaPlug,0.1787,0.1273,40.335
+194,sobelove,Beéle,0.0876,0.1181,-25.8544
+195,her,JVKE,0.1963,0.0835,135.0578
+196,Baby Steps,Olivia Dean,0.2584,0.2405,7.4615
+197,Ama Um Maloqueiro,Rafa e Junior,0.1812,0.1515,19.6283
+198,Ojos Tristes,Selena Gomez,0.0953,0.1221,-21.9299
+199,CANCELLED!,Taylor Swift,0.0962,0.2485,-61.284
+200,Let Alone The One You Love,Olivia Dean,0.2016,0.2405,-16.1601
+201,NOW OR NEVER,Tkandz,0.1831,0.2256,-18.8325
+202,Better Me For You (Brown Eyes),Max McNown,0.208,0.1075,93.4079
+203,Love Hangover,JENNIE,0.0712,0.1092,-34.7902
+204,Fable,Gigi Perez,0.1198,0.0908,31.9388
+205,Zoo,Disney,0.4092,0.3343,22.3884
+206,Ruin The Friendship,Taylor Swift,0.1427,0.2485,-42.57
+207,"Gehra Hua (From ""Dhurandhar"")",Shashwat Sachdev,0.4421,0.3274,35.0412
+208,Devil in Disguise,Marino,0.1572,0.1789,-12.1314
+209,NO BATIDÃO,ZXKAI,0.255,0.2187,16.6049
+210,NINAO,GIMS,0.1134,0.0852,33.1398
+211,What Did I Miss?,Drake,0.4668,0.1704,173.8945
+212,7-3,Peso Pluma,0.3562,0.3798,-6.2019
+213,Blue Strips,Jessie Murph,0.1019,0.1298,-21.4999
+214,MENTE MÁ,Nakama,0.1395,0.1439,-3.0619
+215,bittersweet,Madison Beer,0.1832,0.2569,-28.6903
+216,Pela Última Vez,Grupo Menos É Mais,0.1757,0.2042,-13.9404
+217,Zero,The Smashing Pumpkins,0.0406,0.0527,-22.9291
+218,Ese Loco Soy Yo,Liberación,0.0733,0.0535,36.9655
+219,morena (Bonus Track),Beéle,0.0575,0.0626,-8.0997
+220,What You Saying,Lil Uzi Vert,0.2796,0.3737,-25.1905
+221,NUNCA MUDA?,Scythermane,0.0625,0.1042,-40.036
+222,ME POSTOU NO DAILY,MC GP,0.2222,0.2393,-7.1634
+223,MONTAGEM BAILÃO,Repsaj,0.083,0.1273,-34.8192
+224,MONTAGEM TOMADA,MXZI,0.0736,0.1227,-40.0167
+225,Islands,The xx,0.0201,0.0461,-56.3691
+226,Dear god,Tate McRae,0.0966,0.1145,-15.6421
+227,Arz Kiya Hai | Coke Studio Bharat,Anuv Jain,0.3765,0.2042,84.4134
+228,SEQUÊNCIA FEITICEIRA,PEDRO SAMPAIO,0.1318,0.2112,-37.5998
+230,Volver,Piso 21,0.0962,0.1106,-13.0547
+231,Which One,Drake,0.2402,0.1838,30.6942
+232,Eu Te Seguro,Panda,0.6052,0.2318,161.1149
+233,LOS VOLTAJE,Sayfalse,0.0959,0.1298,-26.1221
+234,Oro,Bronco,0.0617,0.0543,13.5765
+235,Make Me Feel,oskar med k,0.2289,0.1615,41.7023
+236,Milagros,KAROL G,0.1576,0.1404,12.2462
+237,Eldest Daughter,Taylor Swift,0.0871,0.2485,-64.9464
+239,LO QUE LE PASÓ A HAWAii,Bad Bunny,0.1558,0.1034,50.6935
+240,COMË N GO,Yeat,0.2185,0.1889,15.6609
+241,NO BATIDÃO,ZXKAI,0.3318,0.2187,51.7236
+242,Saudade De Quem Eu Sou,Henrique & Juliano,0.1592,0.0918,73.3388
+243,we never dated,sombr,0.4376,0.1615,170.8996
+244,Solcito,Miguel Bueno,0.1045,0.1202,-13.0768
+245,NUBES,De La Rose,0.1801,0.127,41.8181
+246,Blancanieves,Natanael Cano,0.15,0.161,-6.8173
+247,SOMEBODY LOVES ME,PARTYNEXTDOOR,0.1463,0.1127,29.8528
+248,"Barbaad (From ""Saiyaara"")",The Rish,0.2783,0.1561,78.3047
+249,Kasih Aba Aba,Naykilla,0.0697,0.1363,-48.8521
+250,TODO KE VER,Jere Klein,0.1452,0.1983,-26.7797
+251,AURORA,Mora,0.141,0.1448,-2.6308
+252,Nunca Voy A Olvidarte,Bronco,0.04,0.0543,-26.3686
+253,Ráfagas al Viento,Victor Mendivil,0.1082,0.1156,-6.4021
+254,Handlebars,JENNIE,0.0797,0.1184,-32.7069
+255,Spring Into Summer,Lizzy McAlpine,0.1653,0.0879,88.1441
+256,The First Time,Damiano David,0.1579,0.1435,10.0663
+257,Saudade Burra,Lauana Prado,0.0702,0.1044,-32.7858
+258,Deixa Eu,Murilo Huff,0.306,0.1991,53.6727
+259,So Far So Fake,Pierce The Veil,0.1892,0.0542,249.2026
+260,LV Sandals,EsDeeKid,0.2115,0.1106,91.1532
+261,Priti,Danny Ocean,0.1292,0.1224,5.569
+262,ACELERADA,sma$her,0.1368,0.1656,-17.3791
+263,Nosso Primeiro Beijo,Gloria Groove,0.0684,0.0746,-8.3104
+264,AMISTA,Blessd,0.1586,0.1347,17.7527
+265,"Tujhe Bhula Diya (From ""Anjaana Anjaani"")",Mohit Chauhan,0.0742,0.0453,63.7562
+266,O Rangrez,Shankar-Ehsaan-Loy,0.1166,0.0441,164.6285
+267,I've Seen It,Olivia Dean,0.2188,0.2405,-9.0071
+268,Vamo a Bailotear,Cris MJ,0.1025,0.1656,-38.0947
+269,Supreme,Shubh,0.0824,0.1324,-37.7587
+270,Quiero Decirte,Abraham Mateo,0.0943,0.0496,90.0099
+271,3 PECADOS DESPUES…,Milo j,0.1066,0.0783,36.1716
+273,The Dead Dance,Lady Gaga,0.1006,0.2149,-53.1873
+274,20 Cigarettes,Morgan Wallen,0.2432,0.1439,68.9988
+275,Linda Mujer,Ian Cordova,0.1698,0.1375,23.5047
+276,two,bbno$,0.1052,0.0879,19.7384
+277,Será Mejor Que Te Vayas,Marco Antonio Solís,0.0614,0.048,27.8089
+278,Forever,HUGEL,0.1633,0.086,89.7912
+279,Dardos,Romeo Santos,0.4707,0.3291,43.0238
+280,TWENTIES,GIVĒON,0.1215,0.1109,9.5661
+281,Eu Vou na Sua Casa,Felipe Amorim,0.0942,0.1571,-40.0548
+283,I Wanted to Leave,SYML,0.0587,0.0452,29.954
+284,Cero Empatía,Julión Álvarez y su Norteño Banda,0.1384,0.0907,52.6696
+285,Crying On The Dancefloor,Sam Feldt,0.0252,0.055,-54.1628
+286,Enséñame A Olvidarte,Intocable,0.0621,0.05,24.131
+287,Lady Lady,Olivia Dean,0.2179,0.1736,25.5177
+288,4x4xU,Lainey Wilson,0.1804,0.0776,132.3868
+289,In My Head,Juice WRLD,0.0302,0.0521,-42.0643
+290,"Daddy Yankee: Bzrp Music Sessions, Vol. 0/66",Bizarrap,0.2071,0.2922,-29.1178
+291,TOXIC,Playboi Carti,0.1357,0.1205,12.5911
+292,mejikuhibiniu,Tenxi,0.0997,0.2121,-53.0001
+293,GO!,CORTIS,0.3193,0.2216,44.0883
+294,Seoul City,JENNIE,0.129,0.1184,8.9185
+295,WASSUP,Young Miko,0.1585,0.1359,16.6537
+296,Century,EsDeeKid,0.2512,0.2849,-11.8231
+297,Con Otra,Cazzu,0.1209,0.1221,-0.9583
+298,Dhun,Mithoon,0.2079,0.0996,108.6843
+299,Descer,Kew,0.0653,0.1089,-40.063
+300,earthquake,JISOO,0.0779,0.1127,-30.8576
+301,Os Anjos Cantam,Jorge & Mateus,0.1097,0.0435,152.356
+303,Ivonny Bonita,KAROL G,0.2449,0.1615,51.6072
+304,Messy (From F1® The Movie),ROSÉ,0.106,0.1404,-24.5045
+305,Boyfriend,Karan Aujla,0.2986,0.2059,45.0306
+306,Hell At Night,BigXthaPlug,0.3985,0.1943,105.0989
+307,Jealous Type,Doja Cat,0.2046,0.2033,0.6362
+308,La Ciudad del Sol,Omar Camacho,0.2014,0.1661,21.2404
+309,MONTAGEM RUGADA,cape,0.1755,0.2103,-16.553
+310,Sweet Dreams,j-hope,0.0853,0.1184,-27.9787
+311,Bandida,Luis R Conriquez,0.0808,0.1057,-23.5887
+312,Niño,Milo j,0.3103,0.2393,29.6453
+313,On & On,Armin van Buuren,0.0413,0.0587,-29.6521
+314,15 Minutes,Sabrina Carpenter,0.0859,0.1127,-23.757
+315,Mi Entorno,Virlan Garcia,0.3458,0.2557,35.2487
+316,Tiramisu,Don Toliver,0.2436,0.2187,11.392
+317,SE VOLVIERON LOCOS,Kane Rodriguez,0.1917,0.0888,115.8577
+318,My Man on Willpower,Sabrina Carpenter,0.1875,0.2121,-11.61
+320,THIS IS FOR,TWICE,0.1725,0.1742,-1.0032
+321,NOT CUTE ANYMORE,ILLIT,0.3042,0.3223,-5.6081
+322,GBP,Central Cee,0.0613,0.1057,-42.0295
+323,HOT,LE SSERAFIM,0.1134,0.0835,35.7899
+324,On the Nature of Daylight,Max Richter,0.0648,0.0485,33.5195
+325,Hammer to the Heart,Teddy Swims,0.0683,0.072,-5.1352
+326,P*RNSTAR,Nessa Barrett,0.0731,0.094,-22.2621
+327,4X4,Travis Scott,0.0721,0.1075,-32.9581
+328,The Abyss,The Weeknd,0.1254,0.1092,14.8498
+329,Pushing It Down and Praying,Lizzy McAlpine,0.1565,0.086,81.8881
+330,Miss possessive,Tate McRae,0.0825,0.1145,-27.9552
+331,El Mayor de los Ranas (En Vivo),Grupo Marca Registrada,0.0998,0.1162,-14.0803
+332,No Me Enseñaste,Thalia,0.0505,0.0493,2.4014
+333,I know love,Tate McRae,0.0671,0.1127,-40.4435
+334,Staying,Lizzy McAlpine,0.1798,0.0705,154.9099
+335,git,BLOK3,0.1038,0.1789,-41.9799
+336,Me Mareo,Kidd Voodoo,0.1469,0.161,-8.743
+337,I Ain't Comin' Back,Morgan Wallen,0.1295,0.1324,-2.1814
+338,Caramel,Sleep Token,0.1195,0.1273,-6.1554
+339,MON BÉBÉ,RnBoi,0.2883,0.2751,4.8017
+340,Ba Ba Bad Remix,Kybba,0.1605,0.1656,-3.0654
+341,CIEL,GIMS,0.0733,0.0852,-13.9405
+342,FaSHioN,CORTIS,0.294,0.2216,32.6713
+343,Thodi Si Daaru,AP Dhillon,0.1747,0.1776,-1.6055
+344,La Pantera,Marcos Villalobos,0.1364,0.1164,17.1476
+345,Hiekka,Nicky Jam,0.0913,0.1379,-33.7898
+346,JETSKI,PEDRO SAMPAIO,0.2635,0.3659,-27.9828
+347,tau mich auf,Zartmann,0.0516,0.1092,-52.7412
+348,"Tum Ho (From ""Rockstar"")",Mohit Chauhan,0.084,0.0448,87.5933
+349,melodrama,disiz,0.206,0.2405,-14.3302
+350,Keşke,BLOK3,0.0782,0.125,-37.4252
+351,Jamaican (Bam Bam),HUGEL,0.9802,0.5275,85.8322
+352,Aquele Lugar,Grupo Menos É Mais,0.1164,0.1124,3.5511
+353,King of Watches,Victor Mendivil,0.1713,0.1476,16.0645
+354,Survivor,2WEI,0.0304,0.0432,-29.6209
+355,Somethin' 'Bout A Woman,Thomas Rhett,0.1136,0.0827,37.3383
+356,Take My Mind,WizTheMc,0.2559,0.1698,50.6984
+357,O Que É Que Tem,Jorge & Mateus,0.068,0.0447,52.2446
+359,napıyosun mesela ?,BLOK3,0.1427,0.1789,-20.2363
+360,Everybody Here Wants You,Jeff Buckley,0.1811,0.0514,252.604
+361,DETRÁS DE TU ALMA,Mora,0.1332,0.1448,-8.0172
+362,Garden Of Eden,Lady Gaga,0.0731,0.1184,-38.2795
+363,Lanterna Dos Afogados,Os Paralamas Do Sucesso,0.046,0.0551,-16.5145
+364,Go Go Juice,Sabrina Carpenter,0.1863,0.2121,-12.1757
+365,Arruma Um Bão,Israel & Rodolffo,0.0477,0.0877,-45.6254
+366,KUSURA BAKMA,BLOK3,0.2131,0.3291,-35.2488
+367,Running Around,Ely Oaks,0.1247,0.1092,14.2087
+368,YOUR WAY'S BETTER,Forrest Frank,0.1584,0.0797,98.6309
+369,Vem Vem,Jmilton,0.0973,0.1505,-35.3405
+370,Up From the Bottom,Linkin Park,0.17,0.1246,36.3924
+371,The Giver,Chappell Roan,0.068,0.1205,-43.58
+372,Sadrah,For Revenge,0.2771,0.0694,299.5121
+373,Backup Plan,Bailey Zimmerman,0.266,0.1379,92.9017
+374,Te Lloré Un Río,Maná,0.0669,0.0536,24.8336
+375,La Guitarra (Remasterizado 2025),Los Auténticos Decadentes,0.0419,0.0527,-20.4613
+376,CORAZÓN PARTÍO,Tito Double P,0.1492,0.1106,34.8466
+377,What Was That,Lorde,0.0837,0.1347,-37.8569
+378,Papasito,KAROL G,0.156,0.1615,-3.427
+379,I Got No Time,The Living Tombstone,0.04,0.0433,-7.5238
+380,You Stole The Show,SIENNA SPIRO,0.2872,0.1638,75.3132
+381,12 Horas / Pra Você Acreditar,Panda,0.1231,0.1078,14.219
+382,Escondendo o Ouro,Zé Neto & Cristiano,0.0887,0.1467,-39.5165
+383,Saudade Proibida,Simone Mendes,0.1024,0.1273,-19.5842
+384,Fancy,Reba McEntire,0.0433,0.0539,-19.7039
+385,EYES CLOSED,JISOO,0.1252,0.2569,-51.2665
+386,Ngapain Repot,Toton Caribo,0.1892,0.1305,44.9426
+387,Dior,MK,0.1419,0.086,64.9196
+388,Montagem Supersonic,KHAOS,0.2152,0.1698,26.7304
+389,Nocaute,Jorge & Mateus,0.0946,0.0436,117.0904
+390,Pretty Little Baby,Connie Francis,0.0816,0.0629,29.7958
+391,Berghain,ROSALÍA,0.1344,0.2792,-51.8673
+392,Sugar Talking,Sabrina Carpenter,0.2368,0.2121,11.6307
+393,Me bloqueia,Ferrugem,0.1004,0.0659,52.3644
+394,Opa cadê eu,Clayton & Romário,0.0356,0.1106,-67.8248
+395,blackout 🧊,Emilia,0.0813,0.124,-34.4281
+396,Dalangin,Earl Agustin,0.1017,0.0545,86.6338
+397,3,Neton Vega,0.1556,0.1127,38.1073
+398,PARISIENNE,GIMS,0.1528,0.1142,33.749
+399,Emergence,Sleep Token,0.1088,0.1202,-9.5
+400,Goodbye,Sabrina Carpenter,0.2088,0.2121,-1.5689
+401,Stecu Stecu,Faris Adam,0.0673,0.1736,-61.2329
+402,Ave Cautiva,Conjunto Primavera,0.0592,0.0487,21.529
+403,Borderline,Ely Oaks,0.1712,0.1339,27.8447
+404,Small Town,John Mellencamp,0.0388,0.0539,-28.0488
+405,Relapse,Warren Zeiders,0.0751,0.0753,-0.2106
+406,Sueña,Intocable,0.0713,0.0494,44.4168
+407,I love you,Dadju,0.0506,0.0639,-20.7703
+408,Me Ama Ou Me Larga,Simone Mendes,0.0532,0.1092,-51.2759
+409,3 AM,Jimmy Guzman,0.1858,0.1882,-1.2577
+410,Should Have Known Better,Sufjan Stevens,0.0233,0.0435,-46.404
+412,Diário de um Cafajeste,DJ Oreia,0.5809,0.2937,97.8111
+413,Si Te Vuelves A Enamorar,Bronco,0.0538,0.0547,-1.674
+414,1-800,bbno$,0.1707,0.1656,3.0949
+415,Oorum Blood,Sai Abhyankkar,0.1923,0.2112,-8.9564
+416,Purple lace bra,Tate McRae,0.0797,0.1145,-30.4004
+417,Me Ha Costado,Neton Vega,0.0978,0.1127,-13.1948
+418,PONTE LOKITA,Katteyes,0.0657,0.1127,-41.6861
+419,Humsafar,Sachet-Parampara,0.235,0.1698,38.3905
+420,MUTT,Leon Thomas,0.1086,0.0812,33.7611
+421,Te Amo y Me Amas,Ian Cordova,0.2766,0.2112,30.9551
+422,Carol Of The Bells,Lindsey Stirling,0.0343,0.0432,-20.5271
+423,CHAMPAGNE,Tito Double P,0.1757,0.1435,22.4741
+424,Parte & Choke,Jombriel,0.0728,0.0925,-21.2588
+425,Cracklin' Rosie,Neil Diamond,0.036,0.0609,-40.8477
+426,Come Play (from the series Arcane League of Legends),Stray Kids,0.0533,0.0895,-40.4505
+427,Ay Mamita,Alan Arrieta,0.1127,0.1467,-23.1512
+428,Amo Minha Favela,DJ Japa NK,0.3408,0.3525,-3.325
+429,DROGA,Mora,0.1459,0.1448,0.7529
+430,One Thing,Lola Young,0.0942,0.1439,-34.5408
+431,Are You Even Real,Teddy Swims,0.0791,0.1044,-24.2643
+432,Papaoutai,mikeeysmind,0.3765,0.3698,1.8127
+433,Seu Astral,Jorge & Mateus,0.1016,0.0456,122.8752
+434,Never Walk Alone,BLOND:ISH,0.1697,0.0805,110.918
+435,SONBAHAR,Era7capone,0.0691,0.1505,-54.0804
+437,MONTAGEM TOMADA,MXZI,0.0603,0.1227,-50.8561
+439,Aku Dah Lupa,MikkyZia,0.0558,0.1246,-55.2312
+440,The Only Thing,Sufjan Stevens,0.0125,0.0435,-71.2373
+441,tu con el,Peso Pluma,0.5059,0.3798,33.2185
+442,Enamorado De Un Fantasma,Liberación,0.0627,0.0523,19.9151
+443,Edge of Desire,Jonas Blue,0.5,0.1789,179.4803
+444,End of the World,Miley Cyrus,0.083,0.1273,-34.8192
+445,How Bad Do U Want Me,Lady Gaga,0.0835,0.1184,-29.4985
+446,ni pedo,Peso Pluma,0.3657,0.3798,-3.7003
+447,The Sick,Bella Kay,0.2699,0.1912,41.1694
+448,PICA PICA,Juan Reza,0.0574,0.1214,-52.7363
+449,Killin' It Girl (Solo Version),j-hope,0.2209,0.1577,40.094
+450,Endless Love,Luther Vandross,0.0332,0.0528,-37.127
+451,Cukup,Ziva Magnolya,0.0776,0.0603,28.6061
+452,Asquerosamente Rico,Oscar Maydon,0.1207,0.154,-21.6223
+453,Thought It Was Love,Ty Myers,0.1718,0.1075,59.7475
+454,Don't Lie,Black Eyed Peas,0.0494,0.048,2.8299
+455,ayy weyy,Fuerza Regida,0.1615,0.1379,17.1189
+456,bad feeling (oompa loompa),Jagwar Twin,0.0446,0.0642,-30.5236
+457,Gula,Neton Vega,0.1838,0.1127,63.137
+458,Jacobo Grinberg,Victor Mendivil,0.1365,0.1287,6.0301
+459,PLAK,Victor Mendivil,0.1389,0.1476,-5.8882
+460,Balorda nostalgia,Olly,0.0639,0.1119,-42.894
+461,RUINART,R2,0.1736,0.1577,10.0965
+462,Seni Düşündüm,Çağla,0.1759,0.1838,-4.2918
+463,Tweaker,GELO,0.0388,0.103,-62.3209
+464,Bongos,Cardi B,0.037,0.0601,-38.4562
+466,Vibra Perfecta,Julión Álvarez y su Norteño Banda,0.0841,0.0907,-7.2289
+467,Location,Zerb,0.1103,0.103,7.1135
+468,Baptized In Fear,The Weeknd,0.0964,0.1092,-11.7104
+469,In And Out Of Love,Armin van Buuren,0.1117,0.0466,139.9091
+470,"Vaarayo Vaarayo (From ""Aadhavan"")",Harris Jayaraj,0.0769,0.0461,66.9262
+471,Veneno,Murilo Huff,0.1038,0.1202,-13.659
+472,Orula,Victor Mendivil,0.235,0.2485,-5.4236
+475,OWA OWA,Lil Tecca,0.0876,0.1505,-41.7865
+476,Open Hearts,The Weeknd,0.1078,0.1092,-1.2695
+477,No Capea,Xavi,0.2064,0.2085,-1.0186
+478,Call Me When You Break Up,Selena Gomez,0.0587,0.1142,-48.6187
+479,Meant to Be Yours,Kevin Murphy,0.0508,0.154,-67.0125
+480,Kupu,Tiara Andini,0.0245,0.0714,-65.6997
+481,KYKY2BONDY,Hamza,0.092,0.1379,-33.2821
+482,him all along,Gunna,0.1064,0.0898,18.5006
+483,Dirimu Yang Dulu,Anggis Devaki,0.4078,0.0964,323.1455
+484,Meu Erro,Os Paralamas Do Sucesso,0.0555,0.0569,-2.4667
+485,Arriba la Compañía,LOS DOS DE TAMAULIPAS,0.2156,0.0759,184.2423
+486,Eres Mi Religión,Maná,0.0665,0.0492,35.1742
+487,Burning Blue,Mariah the Scientist,0.1493,0.1379,8.2715
+488,Mengapa,Rony Parulian,0.0699,0.0617,13.3047
+489,intro,Peso Pluma,0.1783,0.3156,-43.5072
+490,PIXELATED KISSES,Joji,0.1741,0.2619,-33.5291
+491,"Phir Se Ud Chala (From ""Rockstar"")",Mohit Chauhan,0.0489,0.0448,9.2061
+492,Thuli Thuli,Yuvan Shankar Raja,0.0734,0.0452,62.5085
+493,Hakayet,VEN1,0.1137,0.063,80.3408
+494,Deslocado,NAPA,0.1432,0.1073,33.4386
+495,INVU,TAEYEON,0.0262,0.0486,-46.124
+496,CHAKA,Fuerza Regida,0.1998,0.1379,44.8938
+497,GO BABY,Justin Bieber,0.1782,0.1742,2.268
+498,Pero La Recuerdo (Cumbia Santa María),Pancho Barraza,0.039,0.0516,-24.4889
+499,Me Paseo,Victor Mendivil,0.2071,0.1476,40.3208
+500,El Plumas,Neton Vega,0.0368,0.0819,-55.0901
+501,Shatter Me,Lindsey Stirling,0.0267,0.0437,-38.9692
+502,Vanish Into You,Lady Gaga,0.0721,0.1184,-39.1238
+503,Geiles Leben,Glasperlenspiel,0.0184,0.0435,-57.7284
+504,I Can't Fix You,The Living Tombstone,0.0707,0.0432,63.8396
+505,Cali Man,EsDeeKid,0.2648,0.1615,63.9264
+506,Forever In Blue Jeans,Neil Diamond,0.045,0.0588,-23.5062
+507,On My Mind,Alex Warren,0.1335,0.1656,-19.3722
+508,The Night The Lights Went Out In Georgia,Reba McEntire,0.0528,0.0433,21.9144
+509,After All The Bars Are Closed,Thomas Rhett,0.1873,0.0812,130.6948
+510,"Desliza (""Ólhinho"" No Corpinho)",Léo Santana,0.1077,0.1439,-25.1597
+511,Ring Ring Ring,"Tyler, The Creator",0.1108,0.181,-38.7737
+512,Pelotero A La Bola,8Uno,0.0995,0.1439,-30.8578
+513,"Manasilaayo (From ""Vettaiyan"")",Anirudh Ravichander,0.0434,0.0847,-48.7535
+514,VCR,The xx,0.0194,0.0461,-57.8886
+515,Bir Çift Göz,Norm Ender,0.1459,0.1656,-11.8831
+516,Corazón,Danny Ocean,0.2486,0.1874,32.6404
+517,Ultra Complicado,Kenny Die,0.148,0.0651,127.2606
+518,Sei Que Tu Me Odeia,Anitta,0.0458,0.0976,-53.0755
+519,Jumping Machine (跳楼机),LBI利比,0.0967,0.1073,-9.8917
+520,Fade Into Darkness,Avicii,0.0246,0.0452,-45.5292
+521,Te Lloré,Conjunto Primavera,0.0793,0.0471,68.5342
+522,check,bbno$,0.0888,0.1116,-20.4613
+523,RATATATA,BABYMETAL,0.1407,0.074,90.037
+524,Wi-Fi,Traia Véia,0.0406,0.079,-48.5787
+525,Ikaw Pa Rin,mrld,0.027,0.0512,-47.2694
+526,Type of Way,Rich Homie Quan,0.0323,0.0442,-26.9894
+527,Vou pela Madrugada,Mc Negão Original,0.2896,0.1109,161.155
+528,Charger,TRIANGLE DES BERMUDES,0.1659,0.1127,47.2493
+529,Tipo Nino Vs Kabrinha,DJ Biel Divulga,0.076,0.151,-49.66
+530,Quitter,Cameron Whitcomb,0.1447,0.0769,88.1615
+531,Página De Ex,Mari Fernandez,0.0626,0.072,-13.0522
+532,Bara Bada Bastu,KAJ,0.0631,0.1145,-44.8966
+533,Follow You,Noizy,0.0759,0.0929,-18.3175
+534,Matadinha De Saudade,Grupo Menos É Mais,0.0465,0.0635,-26.7674
+535,Miss You Like Crazy,Natalie Cole,0.0354,0.0551,-35.7525
+536,Alamak,Rizky Febian,0.1854,0.2485,-25.3852
+537,"Nenjukkul Peidhidum (From ""Vaaranam Aayiram"")",Harris Jayaraj,0.0484,0.0462,4.7607
+538,CRG,Central Cee,0.1492,0.1075,38.733
+539,Seis Pies Abajo,Banda El Recodo,0.1093,0.0522,109.4687
+540,Gone Gone Gone,David Guetta,0.3724,0.2569,44.9548
+541,Lihat Kebunku (Taman Bunga),Aku Jeje,0.5707,0.2328,145.1107
+542,JANE DOE,Kenshi Yonezu,0.1621,0.2361,-31.3294
+543,Altas Loucurinhas (Uni Duni Tê),Matheus Fernandes,0.0089,0.0534,-83.3469
+544,Mist,EsDeeKid,0.3054,0.1615,89.0602
+545,Calon Mantu Idaman,Rombongan Bodonk Koplo,0.0864,0.1439,-39.9609
+546,DÓNDE,Kapo,0.2286,0.1692,35.1126
+547,Cannonball,Lithe,0.1664,0.1838,-9.4608
+548,Vitamina,Danny Ocean,0.1127,0.1073,5.0176
+549,Nasty Dog,Sir Mix-A-Lot,0.077,0.0531,45.0041
+550,Rottweiler,EsDeeKid,0.2441,0.1615,51.1119
+551,Vale la Pena,Juan Luis Guerra 4.40,0.0843,0.0514,64.1332
+552,Dawn,Dario Marianelli,0.0373,0.0477,-21.7832
+553,CEREMONY,Stray Kids,0.141,0.2059,-31.516
+554,Death with Dignity,Sufjan Stevens,0.0296,0.0435,-31.8899
+555,Picture Of You,Boyzone,0.0299,0.0519,-42.3739
+556,"Shararat (From ""Dhurandhar"")",Shashwat Sachdev,0.3835,0.3343,14.7017
+557,Chaparrita,Standly,0.1028,0.1089,-5.6428
+559,I Ain't Sayin',Jordan Davis,0.1404,0.0797,76.0592
+560,Never Getting Laid,Sabrina Carpenter,0.1433,0.2121,-32.4464
+561,Gil,Milo j,0.351,0.2393,46.65
+562,Eu Mereço Ser Feliz,Mumuzinho,0.0473,0.0434,8.976
+563,OJITOS MENTIROSOS,Chino Pacas,0.1746,0.1889,-7.5771
+564,bloodonmyhands,Tate McRae,0.0811,0.1124,-27.8523
+565,LA NETA,Clave Especial,0.1724,0.1142,50.9053
+566,Ava Enna,Harris Jayaraj,0.0522,0.0462,12.9857
+567,Perdedor,Intocable,0.0994,0.0512,94.3113
+568,Paris,Nono La Grinta,0.2871,0.1267,126.6853
+569,TU COQUETTE,Clave Especial,0.0592,0.0725,-18.3541
+570,Se Eu Te Perdoar,Clayton & Romário,0.1848,0.2246,-17.7118
+571,DON'T KILL THE PARTY,Ty Dolla $ign,0.3196,0.2328,37.2654
+572,Antara Ada dan Tiada,Utopia,0.0777,0.049,58.5201
+573,Periódico de Ayer,Héctor Lavoe,0.0769,0.0594,29.4254
+574,Pahina,Cup of Joe,0.2749,0.106,159.4266
+575,I'm A Little Crazy,Morgan Wallen,0.1238,0.1227,0.8958
+576,Guasto D'Amore,Bresh,0.0566,0.0539,5.0503
+577,Dead Girl Walking,Kevin Murphy,0.0586,0.154,-61.9475
+578,OLIMPO,Milo j,0.2161,0.1122,92.6849
+579,With You,Davido,0.1109,0.1324,-16.231
+580,HEAVY LOVE,Odetari,0.1123,0.1104,1.723
+581,"Sitaare (From ""Ikkis"")",Arijit Singh,0.4957,0.3379,46.7031
+582,Caos de Alguém (Ao Vivo),Felipe e Rodrigo,0.1925,0.1789,7.5999
+583,Die In a Fire,The Living Tombstone,0.0524,0.0434,20.6224
+584,Ese,Conjunto Primavera,0.0867,0.0475,82.3451
+585,cliché,mgk,0.1513,0.411,-63.1843
+586,dandelion,Ariana Grande,0.1458,0.1246,16.9765
+587,Next Summer,Damiano David,0.0834,0.1164,-28.3716
+588,i miss you,Beéle,0.0755,0.0896,-15.7805
+589,no song without you,HONNE,0.0157,0.0447,-64.8724
+590,Desesperada,Marta Sánchez,0.0465,0.0535,-13.1119
+591,Wait For You,Myles Smith,0.1164,0.0827,40.7234
+593,1000COSAS,Lola Indigo,0.0279,0.0687,-59.3736
+594,Ride,Sir Mix-A-Lot,0.0554,0.0529,4.7809
+595,We Almost Broke Up Again Last Night,Sabrina Carpenter,0.1706,0.2121,-19.5769
+596,Beautiful Strangers,TOMORROW X TOGETHER,0.0412,0.181,-77.2335
+597,bauch beine po,Shirin David,0.0359,0.0796,-54.9254
+598,Gauchinha,DJ Japa NK,0.3805,0.3639,4.549
+599,TN,Morgan Wallen,0.1747,0.1439,21.3984
+600,Mariposa Traicionera,Maná,0.0635,0.0492,29.0761
+601,Gen Z Luv,Central Cee,0.0545,0.0796,-31.572
+602,Ants Marching,Dave Matthews Band,0.0351,0.0526,-33.3045
+603,Mon amour,Slimane,0.0465,0.0625,-25.6296
+604,Do You Want To,Franz Ferdinand,0.0284,0.048,-40.8832
+605,MONTAGEM COMA,ANDROMEDA,0.2221,0.154,44.2228
+606,Mundhinam,Harris Jayaraj,0.054,0.0462,16.9292
+607,SOMETHING ABOUT YOU,PARTYNEXTDOOR,0.1358,0.1127,20.5332
+608,PA QUE LO BAILES (BAILALO ROCKY),Lomiiel,0.1079,0.1164,-7.3297
+609,KEHLANI (REMIX) [feat. Kehlani],Jordan Adetunji,0.0866,0.074,17.0917
+610,ZAZA,Oscar Maydon,0.0993,0.154,-35.5186
+611,Beers And Sunshine,Darius Rucker,0.0379,0.0449,-15.5936
+612,Vai Cair Água,Diego & Arnaldo,0.1579,0.1615,-2.2508
+613,I Am...I Said,Neil Diamond,0.0456,0.0608,-24.9708
+614,Palmar,Caloncho,0.016,0.0441,-63.6838
+615,Always Somewhere,Scorpions,0.1534,0.0588,160.7587
+616,The Chase,Hearts2Hearts,0.141,0.1153,22.2618
+617,Sampai Menutup Mata,Mahalini,0.0568,0.0843,-32.6459
+618,Triple Lavada,Esau Ortiz,0.1416,0.125,13.3068
+619,Libu-Libong Buwan (Uuwian),Kyle Raphael,0.4829,0.2059,134.5454
+620,Borboletas,Victor & Leo,0.0909,0.0466,95.2349
+621,Tus Mentiras (En Vivo),Moy Bobadilla,0.5677,0.1294,338.5499
+622,Ignoraste Mis Lágrimas,Pancho Barraza,0.0522,0.0525,-0.641
+623,ILY,Kapo,0.1406,0.1181,19.0054
+624,COSITA LINDA,ELENA ROSE,0.2831,0.1831,54.6356
+625,Something Inbetween,Olivia Dean,0.2762,0.2405,14.864
+626,Silly Love Songs,Wings,0.0428,0.0594,-27.8857
+627,peliculiando,Fuerza Regida,0.1566,0.1379,13.5654
+628,Der Kommissar,Falco,0.0345,0.0574,-39.876
+629,"No, No, No",Thalia,0.0588,0.0475,23.6665
+630,Sunshine,Lavern,0.0351,0.0482,-27.2425
+631,Kick It In The Sticks,Brantley Gilbert,0.0269,0.0455,-40.8656
+632,Superman,Morgan Wallen,0.1218,0.1408,-13.515
+633,GOOD CREDIT,Playboi Carti,0.068,0.1205,-43.58
+634,Senta e Cala a Boca,Mc Jacaré,0.0977,0.1102,-11.305
+635,En Kadhal Solla,Yuvan Shankar Raja,0.0767,0.0461,66.2994
+636,Resumindo,Zé Neto & Cristiano,0.1167,0.1467,-20.4236
+637,love race,mgk,0.0172,0.0462,-62.8026
+638,People Watching,Sam Fender,0.1511,0.094,60.6867
+639,Me llamo Raquel,Banda Machos,0.0509,0.0502,1.4873
+641,Do It,Stray Kids,0.238,0.3173,-24.9835
+642,Soleil Bleu,Bleu Soleil,0.1586,0.1298,22.1797
+643,Try That In A Small Town,Jason Aldean,0.048,0.0566,-15.1687
+644,Enquanto Houver Razões,Jorge & Mateus,0.1035,0.0447,131.7252
+645,"Monica (From ""Coolie"")",Anirudh Ravichander,0.1323,0.1742,-24.0738
+646,WALKING AWAY,Justin Bieber,0.2633,0.1742,51.1064
+648,Have You Ever Seen The Rain,Rod Stewart,0.0429,0.0472,-9.0457
+649,P.V.,Victor Mendivil,0.328,0.1476,122.2368
+650,Pa Ti,Neton Vega,0.1631,0.1127,44.7641
+651,Save the Last Dance for Me,Ben E. King,0.0274,0.0558,-50.9348
+652,Baila para Mi,Standly,0.0558,0.0509,9.6617
+653,MAMA.CITA (hasta la vista),Luísa Sonza,0.0084,0.0531,-84.1882
+655,Beautiful As You,Thomas Rhett,0.0818,0.073,12.0062
+656,It's Strange,Louis The Child,0.0096,0.0433,-77.8397
+657,bunda 🍑,Emilia,0.0578,0.1142,-49.4064
+658,La nena,Banda Pequeños Musical,0.098,0.046,113.2329
+659,Perfecta,Banda Los Recoditos,0.0229,0.0435,-47.3362
+660,Mentirosa,Hugo & Guilherme,0.1784,0.1,78.3937
+661,Angin Rindu,Rony Parulian,0.0411,0.079,-47.9454
+662,CACHORRINHAS,Luísa Sonza,0.0099,0.0505,-80.4038
+663,Alégale Al Umpire,Grupo Firme,0.2172,0.1404,54.6946
+664,Tonight,PinkPantheress,0.1836,0.1273,44.1831
+665,Pass The Nirvana,Pierce The Veil,0.0594,0.0512,16.0425
+666,Tiene,Tobal Mj,0.0799,0.1162,-31.2125
+667,Hampstead,Ariana Grande,0.1833,0.1246,47.0631
+668,Ends of the Earth,Ty Myers,0.1166,0.0898,29.8607
+669,Pusherman,Curtis Mayfield,0.0339,0.0604,-43.86
+670,Drinkin' Alone,Ty Myers,0.1198,0.0564,112.4394
+671,GIMME A HUG,Drake,0.0768,0.1127,-31.8339
+672,malibU,rusowsky,0.1975,0.1471,34.2447
+673,Tonto corazón,Los Acosta,0.0994,0.0547,81.6656
+674,Damocles,Sleep Token,0.1213,0.1351,-10.202
+675,CN TOWER,PARTYNEXTDOOR,0.095,0.1127,-15.68
+676,NO ERA AMOR,DJ Asul,0.2055,0.1426,44.137
+677,FXCK UP THE WORLD,LISA,0.0613,0.1164,-47.3523
+678,Amen,Shaboozey,0.1663,0.1026,62.1404
+679,Bad State of Mind,Treaty Oak Revival,0.2939,0.1127,160.8594
+680,Aquamarine,Addison Rae,0.0952,0.0908,4.8462
+681,Kali Kali Zulfon Ke,Madhur Sharma,0.0359,0.0915,-60.7829
+682,Stupid Cupid,Connie Francis,0.0272,0.0576,-52.7555
+683,You Make Me Feel (Mighty Real),Sylvester,0.0373,0.0547,-31.8297
+684,Heart Of A Woman,Summer Walker,0.0876,0.0908,-3.5239
+685,Wake Up,Fetty Wap,0.0092,0.0432,-78.7162
+686,Headphones On,Addison Rae,0.1122,0.1324,-15.249
+687,Ishqa Ve,Zeeshan Ali,0.3434,0.2042,68.2007
+688,Una Noche Sin Pensar,Sebastian Yatra,0.0195,0.0543,-64.1115
+689,Pal Pal,Afusic,0.2022,0.1134,78.2312
+690,X TI,Kapo,0.178,0.1692,5.2058
+691,"Matargashti (From ""Tamasha"")",Mohit Chauhan,0.0838,0.0433,93.4249
+692,putielegante,Peso Pluma,0.275,0.3798,-27.5843
+693,Adiós Amor,Conjunto Primavera,0.1228,0.0487,152.0906
+694,Le temps de l'amour,Françoise Hardy,0.0389,0.0627,-37.9341
+695,Con Toda La Fe,LOS DOS DE TAMAULIPAS,0.1987,0.0898,121.2977
+696,ROSE,HANA,0.1779,0.1267,40.4643
+697,Survive,Lewis Capaldi,0.1203,0.1656,-27.3444
+698,La culebra,Banda Machos,0.0542,0.0539,0.5092
+699,Roundtable Rival,Lindsey Stirling,0.0267,0.0437,-38.9614
+701,CRUSH,Playboi Carti,0.0548,0.1205,-54.5321
+702,Chevaliers De Sangreal,Hans Zimmer,0.0348,0.0474,-26.5418
+703,MF Gabhru!,Karan Aujla,0.1532,0.1889,-18.905
+704,Face 2 Face,Juice WRLD,0.0237,0.053,-55.2901
+705,Energía Bacana,Sebastian Yatra,0.0319,0.0604,-47.1646
+706,I'll Take Care of You,"Tyler, The Creator",0.1441,0.181,-20.3727
+707,familie,Mrs. GREEN APPLE,0.0471,0.0811,-41.9119
+708,Enough (Miami),Cardi B,0.0728,0.0692,5.2474
+709,LA REINA,Lola Indigo,0.0324,0.0758,-57.2363
+710,Body Splash,Felipe Araújo,0.0357,0.0926,-61.451
+711,Eu Quero Só Você,Jorge & Mateus,0.0622,0.0456,36.4452
+712,Calma,Jorge & Mateus,0.1714,0.0436,293.2345
+713,Don’t Worry I’ll Make You Worry,Sabrina Carpenter,0.1353,0.2121,-36.2177
+714,"If You Want To Sing Out, Sing Out",Yusuf / Cat Stevens,0.0195,0.0492,-60.3812
+715,ZEN,JENNIE,0.1288,0.1078,19.5078
+716,Life Is Simple (Move Your Body) [Feat Salomé Das],Maesic,0.228,0.1184,92.5072
+717,Bluest Flame,Selena Gomez,0.0797,0.1221,-34.7095
+718,Someone That Loves You,HONNE,0.0127,0.0433,-70.6564
+720,Reliquia,ROSALÍA,0.149,0.2907,-48.7437
+722,Namumula,Maki,0.0518,0.0835,-37.9725
+723,bckpckbyz,Peso Pluma,0.2498,0.3798,-34.2202
+724,Sei tocar violão,Clayton & Romário,0.0327,0.0868,-62.3302
+725,Bintang 5,Tenxi,0.1374,0.2121,-35.2278
+726,Bete Balanço,Barão Vermelho,0.0506,0.0569,-11.0778
+727,Dance With My Father,Luther Vandross,0.0372,0.0495,-24.8479
+728,Piel Morena,Thalia,0.041,0.0527,-22.1698
+729,Clave Privada,Banda El Recodo,0.1402,0.0522,168.6872
+730,with the IE (way up),JENNIE,0.1032,0.1184,-12.8652

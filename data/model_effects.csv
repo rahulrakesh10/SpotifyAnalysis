@@ -1,0 +1,33 @@
+factor_group,factor,effect_pct,ci_low_pct,ci_high_pct,p_value,p_value_adjusted,clear_after_adjustment
+Genre,Alternative,-8.7436,-32.719,23.7754,0.5563,1.0,0
+Genre,Asian Music,-14.5645,-36.5715,15.0781,0.3003,1.0,0
+Genre,Brazilian Music,41.4796,-14.8997,135.2103,0.1809,1.0,0
+Genre,Country,51.7226,23.9544,85.7115,0.0001,0.0017,1
+Genre,Dance,17.971,-5.3627,47.0578,0.1416,1.0,0
+Genre,Electro,12.852,-17.155,53.7278,0.4433,1.0,0
+Genre,Latin Music,51.9832,21.4599,90.1772,0.0003,0.0078,1
+Genre,Other,23.7687,-0.0027,53.1911,0.05,1.0,0
+Genre,R&B,-4.6797,-23.4422,18.681,0.6683,1.0,0
+Genre,Rap/Hip Hop,17.1929,-5.2807,44.9986,0.1441,1.0,0
+Artist from,Asia,7.2622,-17.1751,38.9096,0.5951,1.0,0
+Artist from,Brazil,-25.772,-53.0531,17.3621,0.2023,1.0,0
+Artist from,Canada,19.4162,-0.8908,43.884,0.0621,1.0,0
+Artist from,Latin America (other),-9.3018,-24.9498,9.6087,0.3123,1.0,0
+Artist from,Mexico,3.0547,-18.232,29.8831,0.7988,1.0,0
+Artist from,Other,18.0171,-6.8017,49.4452,0.1691,1.0,0
+Artist from,UK/Europe,5.7988,-12.945,28.5784,0.571,1.0,0
+Artist from,Unknown,-15.1168,-35.3142,11.3871,0.2372,1.0,0
+Released as,Compilation,-12.3938,-33.4301,15.2899,0.3449,1.0,0
+Released as,EP,0.9402,-15.8062,21.0176,0.9195,1.0,0
+Released as,Single,-1.14,-13.6277,13.1532,0.8678,1.0,0
+Song & artist,Explicit,-1.7351,-12.6469,10.5398,0.7707,1.0,0
+Song & artist,Collaboration,14.9425,-37.5032,111.3992,0.6542,1.0,0
+Song & artist,Group (vs solo artist),18.1837,1.6679,37.3823,0.0296,0.8881,0
+Song & artist,Length (per extra minute),7.1624,-0.4514,15.3584,0.0658,1.0,0
+Song & artist,Artist's hits in list (×2),-1.8187,-7.8662,4.6258,0.5715,1.0,0
+Audio,danceability (+1 SD),-5.5222,-10.7079,-0.0353,0.0486,1.0,0
+Audio,energy (+1 SD),-3.9616,-9.3817,1.7827,0.1726,1.0,0
+Audio,valence (+1 SD),-0.8381,-5.8789,4.4727,0.7519,1.0,0
+Audio,acousticness (+1 SD),1.5193,-3.804,7.1372,0.5832,1.0,0
+Audio,speechiness (+1 SD),-2.1424,-6.5204,2.4405,0.3537,1.0,0
+Audio,tempo (+1 SD),1.7238,-2.9752,6.6504,0.4788,1.0,0
