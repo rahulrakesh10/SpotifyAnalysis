@@ -1,0 +1,22 @@
+# Applied on top of LibreChat's own docker-compose.yml.
+services:
+  api:
+    # Only reachable from this computer
+    ports: !override
+      - "127.0.0.1:3080:3080"
+    # Skip LibreChat's document-search service; the agent only needs the database
+    depends_on: !override
+      - mongodb
+    volumes:
+      - type: bind
+        source: ./librechat.yaml
+        target: /app/librechat.yaml
+    # Join the network where ClickHouse and the tool server run
+    networks:
+      - default
+      - songs
+
+networks:
+  songs:
+    name: agent_default
+    external: true
