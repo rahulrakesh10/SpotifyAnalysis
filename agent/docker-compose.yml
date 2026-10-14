@@ -3,6 +3,7 @@
 services:
   clickhouse:
     image: clickhouse/clickhouse-server:25.8
+    mem_limit: 1536m   # this table is tiny; keeps Docker from growing
     environment:
       CLICKHOUSE_DB: spotify
       CLICKHOUSE_USER: admin
@@ -25,6 +26,7 @@ services:
 
   mcp-clickhouse:
     build: ./mcp
+    mem_limit: 256m
     depends_on:
       clickhouse: { condition: service_healthy }
     environment:

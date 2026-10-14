@@ -11,10 +11,20 @@ services:
       - type: bind
         source: ./librechat.yaml
         target: /app/librechat.yaml
+    mem_limit: 1g
     # Join the network where ClickHouse and the tool server run
     networks:
       - default
       - songs
+
+  # MongoDB otherwise claims about half the memory it can see for its cache
+  mongodb:
+    command: mongod --noauth --wiredTigerCacheSizeGB 0.25
+    mem_limit: 512m
+  meilisearch:
+    mem_limit: 512m
+    environment:
+      - MEILI_MAX_INDEXING_MEMORY=256Mb
 
 networks:
   songs:
