@@ -46,5 +46,20 @@ services:
     ports:
       - "127.0.0.1:8000:8000"
 
+  # Ready-made song tools (no SQL needed), for small models that struggle to write queries
+  songs-mcp:
+    build: ./songs_mcp
+    mem_limit: 256m
+    depends_on:
+      clickhouse: { condition: service_healthy }
+    environment:
+      CLICKHOUSE_HOST: clickhouse
+      CLICKHOUSE_PORT: "8123"
+      CLICKHOUSE_USER: agent_ro
+      CLICKHOUSE_PASSWORD: ${AGENT_RO_PASSWORD}
+      MCP_AUTH_TOKEN: ${MCP_AUTH_TOKEN}
+    ports:
+      - "127.0.0.1:8001:8001"
+
 volumes:
   clickhouse-data:

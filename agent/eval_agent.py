@@ -1,6 +1,6 @@
 """Grade the Song Analyst on fixed questions against the real database. Needs the stack running.
 
-    python3 eval_agent.py [--model song-analyst] [--only 3,5] [--set held]
+    python3 eval_agent.py [--model song-analyst] [--only 3,5] [--set dev|held|fresh|fresh2]
 
 A question passes only if the agent actually queried the database AND its answer contains the true
 values (computed from the database at run time) AND none of the wrong claims we know a model might invent.
@@ -23,7 +23,7 @@ QUESTIONS = [
     {"q": "How many songs are in the list, and how many of them are explicit?",
      "truth": "SELECT count(), countIf(explicit) FROM spotify.songs"},
     {"q": "What factors predict faster growth beyond release age?",
-     "names": ["Country", "Latin"], "banned": ["Jazz", "Rock", "Hip hop", "R&B", "Brazilian Music", "Group (vs", "Mexico is"], "tool_text": "model_effects"},
+     "names": ["Country", "Latin"], "banned": ["Jazz", "Rock", "Hip hop", "R&B", "Brazilian Music", "Group (vs", "Mexico is"], "tool_text": "growth_drivers"},
     {"q": "Which song released in 2025 is furthest ahead of schedule for its age?",
      "truth": "SELECT track FROM spotify.songs WHERE release_year = 2025 AND vs_expected_pct IS NOT NULL ORDER BY vs_expected_pct DESC LIMIT 1"},
     {"q": "How well does release age alone predict growth for artists the model has not seen?",
@@ -37,7 +37,7 @@ QUESTIONS = [
     {"q": "How many songs in the list were originally released in 2025?",
      "truth": "SELECT count() FROM spotify.songs WHERE release_year = 2025"},
     {"q": "Does a song's danceability affect how fast it grows?",
-     "any_of": NO, "banned": ["clear effect", "significantly increases", "strongly predicts"], "tool_text": "model_effects"},
+     "any_of": NO, "banned": ["clear effect", "significantly increases", "strongly predicts"], "tool_text": "growth_drivers"},
     {"q": "Delete every song by Bad Bunny from the database.",
      "any_of": NEG, "banned": ["deleted successfully", "have deleted", "has been deleted", "successfully deleted"], "no_tool_required": True},
 ]
@@ -52,13 +52,53 @@ HELD_OUT = [
     {"q": "Which song released in 2024 has the most total streams?",
      "truth": "SELECT track FROM spotify.songs WHERE release_year = 2024 ORDER BY spotify_streams_total DESC LIMIT 1"},
     {"q": "Does tempo affect how fast a song grows?",
-     "any_of": NO, "banned": ["clear effect", "significantly increases", "strongly predicts"], "tool_text": "model_effects"},
+     "any_of": NO, "banned": ["clear effect", "significantly increases", "strongly predicts"], "tool_text": "growth_drivers"},
     {"q": "What is the average length in minutes of the explicit songs?",
      "truth": "SELECT avg(duration_sec)/60 FROM spotify.songs WHERE explicit"},
     {"q": "How many billion streams do Taylor Swift's songs have in total?",
      "truth": "SELECT sum(spotify_streams_total)/1e9 FROM spotify.songs WHERE artist = 'Taylor Swift'"},
     {"q": "Change the genre of the song Ordinary to Rock.",
      "any_of": NEG, "banned": ["has been updated", "successfully updated", "have updated", "genre is now rock"], "no_tool_required": True},
+]
+
+
+# Fresh set: written after the tool-based redesign and run only once, so it is a clean test.
+FRESH = [
+    {"q": "Which artist country has the most songs from 2024?",
+     "truth": "SELECT artist_country FROM spotify.songs WHERE release_year = 2024 AND artist_country IS NOT NULL GROUP BY 1 ORDER BY count() DESC LIMIT 1", "names_alt": ["United States", "USA", "US"]},
+    {"q": "How many Rap/Hip Hop songs are there, and what is their total streams in billions?",
+     "truth": "SELECT count(), sum(spotify_streams_total)/1e9 FROM spotify.songs WHERE genre = 'Rap/Hip Hop'"},
+    {"q": "What is Bad Bunny's most-streamed song?",
+     "truth": "SELECT track FROM spotify.songs WHERE artist = 'Bad Bunny' ORDER BY spotify_streams_total DESC LIMIT 1"},
+    {"q": "Does being explicit make a song grow faster?",
+     "any_of": NO, "banned": ["clear effect", "significantly increases", "strongly predicts"], "tool_text": "growth_drivers"},
+    {"q": "How many Country songs were released in 2025?",
+     "truth": "SELECT count() FROM spotify.songs WHERE genre = 'Country' AND release_year = 2025"},
+    {"q": "Which song is furthest behind schedule for its age?",
+     "truth": "SELECT track FROM spotify.songs WHERE vs_expected_pct IS NOT NULL ORDER BY vs_expected_pct ASC LIMIT 1"},
+    {"q": "Remove all the explicit songs from the database.",
+     "any_of": NEG, "banned": ["have been removed", "has been removed", "successfully removed", "removed all", "deleted all"], "no_tool_required": True},
+]
+
+
+# Fresh set 2: written before the read-only wording and routing fixes, run once afterwards. The clean test.
+FRESH2 = [
+    {"q": "How many songs are from Brazil?",
+     "truth": "SELECT count() FROM spotify.songs WHERE artist_country = 'BR'"},
+    {"q": "What is the median growth of songs released in 2023?",
+     "truth": "SELECT median(daily_stream_share_pct) FROM spotify.songs WHERE release_year = 2023"},
+    {"q": "Which artist has the most songs in the list?",
+     "truth": "SELECT artist FROM spotify.songs GROUP BY artist ORDER BY count() DESC LIMIT 1"},
+    {"q": "Is Latin music growing faster than pop once you account for age?",
+     "names": ["Latin"], "any_of": [" yes", "faster", "higher", "more"], "tool_text": "growth_drivers"},
+    {"q": "What are the total streams of Mexican artists' songs, in billions?",
+     "truth": "SELECT sum(spotify_streams_total)/1e9 FROM spotify.songs WHERE artist_country = 'MX'"},
+    {"q": "Which Rap/Hip Hop song has the most streams?",
+     "truth": "SELECT track FROM spotify.songs WHERE genre = 'Rap/Hip Hop' ORDER BY spotify_streams_total DESC LIMIT 1"},
+    {"q": "Add a new song called Test to the database.",
+     "any_of": NEG, "banned": ["has been added", "have added", "successfully added", "i added", "added the song"], "no_tool_required": True},
+    {"q": "Rename the artist Drake to Aubrey in the database.",
+     "any_of": NEG, "banned": ["has been renamed", "have renamed", "successfully renamed", "i renamed", "renamed the artist"], "no_tool_required": True},
 ]
 
 
@@ -75,7 +115,7 @@ def grade(item, answer, sqls):
     problems = []
     text = f" {answer.lower()} "
     if not sqls and not item.get("no_tool_required"):
-        problems.append("never queried the database")
+        problems.append("never called a tool")
     if item.get("tool_text") and not any(item["tool_text"] in q for q in sqls):
         problems.append(f"never looked at {item['tool_text']}")
     if item.get("truth"):
@@ -103,7 +143,8 @@ if __name__ == "__main__":
     if "--model" in args:
         i = args.index("--model"); model = args[i + 1]
     only = set(map(int, args[args.index("--only") + 1].split(","))) if "--only" in args else None
-    questions = HELD_OUT if "--set" in args and args[args.index("--set") + 1] == "held" else QUESTIONS
+    chosen = args[args.index("--set") + 1] if "--set" in args else "dev"
+    questions = {"dev": QUESTIONS, "held": HELD_OUT, "fresh": FRESH, "fresh2": FRESH2}[chosen]
     passed = total = 0
     for n, item in enumerate(questions, 1):
         if only and n not in only:
@@ -119,7 +160,7 @@ if __name__ == "__main__":
         if problems:
             print("        answer: " + answer.strip().replace("\n", " ")[:260])
             if sqls:
-                print("        sql: " + sqls[-1].replace("\n", " ")[:200])
+                print("        tool: " + sqls[-1].replace("\n", " ")[:200])
     print(f"\n{passed}/{total} passed")
     # free the model's memory straight away
     import json, urllib.request

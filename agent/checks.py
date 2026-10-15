@@ -19,6 +19,10 @@ def rows_in(name):
         return list(csv.DictReader(f))
 
 
+# the genre list hard-coded in songs_mcp/server.py
+import re
+GENRES = re.findall(r'"([^"]+)"', re.search(r"Genre = Literal\[(.*?)\]", (Path(__file__).parent / "songs_mcp" / "server.py").read_text(), re.S).group(1))
+
 songs_csv = rows_in("spotify_2025_enriched.csv")
 growth_csv = rows_in("song_growth.csv")
 effects_csv = rows_in("model_effects.csv")
@@ -31,6 +35,7 @@ SQL = {
     "models": "SELECT r_squared_unseen_artists FROM spotify.model_comparison WHERE model = 'age only'",
     "top": "SELECT artist, count() AS n FROM spotify.songs GROUP BY artist ORDER BY sum(spotify_streams_total) DESC LIMIT 1",
     "hardy": "SELECT toYear(original_release_date) FROM spotify.songs WHERE track = 'Le temps de l\\'amour'",
+    "genres": "SELECT groupArray(genre) FROM (SELECT DISTINCT genre FROM spotify.songs WHERE genre IS NOT NULL ORDER BY genre)",
     "drop": "DROP TABLE spotify.songs",
     "insert": "INSERT INTO spotify.songs (rank) VALUES (1)",
     "system": "SELECT count() FROM system.users",
@@ -53,6 +58,7 @@ checks = [
     ("age explains about half on unseen artists", first("models") and 0.45 <= first("models")[0] <= 0.6, str(first("models"))),
     ("Bad Bunny leads with 15 songs", first("top") == ["Bad Bunny", 15], str(first("top"))),
     ("1962 song keeps its 1962 date", first("hardy") == [1962], str(first("hardy"))),
+    ("song tools list every genre in the data", out["genres"][0] and sorted(first("genres")[0]) == sorted(GENRES), str(first("genres"))),
     ("agent cannot drop a table", not out["drop"][0] and "ACCESS_DENIED" in out["drop"][1], out["drop"][1][:60]),
     ("agent cannot insert rows", not out["insert"][0] and "ACCESS_DENIED" in out["insert"][1], out["insert"][1][:60]),
     ("agent cannot read system tables", not out["system"][0] and "ACCESS_DENIED" in out["system"][1], out["system"][1][:60]),

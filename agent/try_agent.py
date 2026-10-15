@@ -1,5 +1,5 @@
-"""Try the Song Analyst with a local Ollama model, using the same instructions and database tool
-that LibreChat uses. Needs the stack running (./start.sh) and Ollama running.
+"""Try the Song Analyst with a local Ollama model, using the same instructions and tools that
+LibreChat uses. Needs the stack running (./start.sh) and Ollama running.
 
     python3 try_agent.py "Which genres grow fastest among 2025 releases?" [--model song-analyst]
 """
@@ -11,45 +11,53 @@ from pathlib import Path
 
 import yaml
 
-from query import run
+from query import call_tool, list_tools
 
 OLLAMA = "http://127.0.0.1:11434/api/chat"
 SPEC = yaml.safe_load((Path(__file__).parent / "librechat-config" / "librechat.yaml").read_text())["modelSpecs"]["list"][0]
 INSTRUCTIONS = SPEC["preset"]["instructions"]
-TOOLS = [{"type": "function", "function": {
-    "name": "run_query",
-    "description": "Run a read-only SQL SELECT against the ClickHouse database and return the rows.",
-    "parameters": {"type": "object", "properties": {"query": {"type": "string", "description": "ClickHouse SQL"}},
-                   "required": ["query"]}}}]
+_tools = None
+
+
+def tools():
+    """The song tools, in the format Ollama expects (read from the running tool server)."""
+    global _tools
+    if _tools is None:
+        _tools = [{"type": "function", "function": {
+            "name": t["name"], "description": t["description"], "parameters": t["inputSchema"]}} for t in list_tools()]
+    return _tools
 
 
 def chat(model, messages):
-    body = {"model": model, "messages": messages, "tools": TOOLS, "stream": False,
+    body = {"model": model, "messages": messages, "tools": tools(), "stream": False,
             "options": {"num_ctx": 8192, "temperature": 0.1}, "keep_alive": "30s"}
     req = urllib.request.Request(OLLAMA, json.dumps(body).encode(), {"Content-Type": "application/json"})
     return json.loads(urllib.request.urlopen(req, timeout=600).read())["message"]
 
 
 def ask(question, model, max_steps=6, quiet=False):
-    """Returns (answer, sqls_run). Prints each tool call unless quiet."""
-    sqls = []
+    """Returns (answer, calls). Each call is written like: song_stats({"genre": "Pop"})."""
+    calls = []
     messages = [{"role": "system", "content": INSTRUCTIONS}, {"role": "user", "content": question}]
     for _ in range(max_steps):
         msg = chat(model, messages)
         messages.append(msg)
         if not msg.get("tool_calls"):
-            return msg.get("content", ""), sqls
+            return msg.get("content", ""), calls
         for call in msg["tool_calls"]:
-            sql = call["function"]["arguments"].get("query", "")
-            sqls.append(sql)
+            name, args = call["function"]["name"], call["function"]["arguments"]
+            calls.append(f"{name}({json.dumps(args, ensure_ascii=False)})")
             if not quiet:
-                print(f"  [tool] {sql[:300]}")
-            ok, body = run([sql])[0]
-            text = json.dumps(body, ensure_ascii=False)[:3000] if ok else "ERROR: " + body[:500]
+                print(f"  [tool] {calls[-1][:300]}")
+            try:
+                ok, body = call_tool(name, args)
+            except Exception as e:  # a bad argument from the model: report it back like LibreChat would
+                ok, body = False, str(e)
+            text = json.dumps(body, ensure_ascii=False)[:3000] if ok else "ERROR: " + str(body)[:500]
             if not quiet:
                 print(f"  [result] {text[:200]}")
             messages.append({"role": "tool", "content": text})
-    return "(stopped: too many tool calls)", sqls
+    return "(stopped: too many tool calls)", calls
 
 
 if __name__ == "__main__":
