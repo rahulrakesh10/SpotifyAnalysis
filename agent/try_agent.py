@@ -1,7 +1,7 @@
 """Try the Song Analyst with a local Ollama model, using the same instructions and database tool
 that LibreChat uses. Needs the stack running (./start.sh) and Ollama running.
 
-    python3 try_agent.py "Which genres grow fastest among 2025 releases?" [--model qwen2.5-coder:14b]
+    python3 try_agent.py "Which genres grow fastest among 2025 releases?" [--model song-analyst]
 """
 import json
 import sys
@@ -30,33 +30,38 @@ def chat(model, messages):
     return json.loads(urllib.request.urlopen(req, timeout=600).read())["message"]
 
 
-def ask(question, model, max_steps=6):
+def ask(question, model, max_steps=6, quiet=False):
+    """Returns (answer, sqls_run). Prints each tool call unless quiet."""
+    sqls = []
     messages = [{"role": "system", "content": INSTRUCTIONS}, {"role": "user", "content": question}]
     for _ in range(max_steps):
         msg = chat(model, messages)
         messages.append(msg)
         if not msg.get("tool_calls"):
-            return msg.get("content", "")
+            return msg.get("content", ""), sqls
         for call in msg["tool_calls"]:
             sql = call["function"]["arguments"].get("query", "")
-            print(f"  [tool] {sql[:300]}")
+            sqls.append(sql)
+            if not quiet:
+                print(f"  [tool] {sql[:300]}")
             ok, body = run([sql])[0]
             text = json.dumps(body, ensure_ascii=False)[:3000] if ok else "ERROR: " + body[:500]
-            print(f"  [result] {text[:200]}")
+            if not quiet:
+                print(f"  [result] {text[:200]}")
             messages.append({"role": "tool", "content": text})
-    return "(stopped: too many tool calls)"
+    return "(stopped: too many tool calls)", sqls
 
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    model = "qwen2.5-coder:14b"
+    model = "song-analyst"
     if "--model" in args:
         i = args.index("--model"); model = args[i + 1]; del args[i:i + 2]
     try:
         for q in args:
             print(f"\nQ: {q}")
             start = time.time()
-            print("\n" + ask(q, model) + f"\n\n({time.time() - start:.0f}s)")
+            print("\n" + ask(q, model)[0] + f"\n\n({time.time() - start:.0f}s)")
     finally:  # free the model's memory straight away
         urllib.request.urlopen(urllib.request.Request(
             "http://127.0.0.1:11434/api/generate", json.dumps({"model": model, "keep_alive": 0}).encode(),

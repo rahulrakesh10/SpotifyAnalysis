@@ -11,7 +11,8 @@ A ClickHouse database holding the enriched songs, plus a read-only tool server s
 - [x] Agent instructions ("Song Analyst" preset in `librechat-config/librechat.yaml`)
 - [x] Agent runs on a local Ollama model (`song-analyst`, made from llama3.2), so no API key is needed
 - [x] LibreChat reaches Ollama and gets proper tool calls back (checked from inside the container)
-- [ ] Try the agent in the chat and check its answers against the database (not done yet)
+- [x] Agent graded automatically against the database (`eval_agent.py`): 9/11 on the tuned questions, 6/7 on held-out ones
+- [ ] Try the agent in the LibreChat chat window itself (not done yet; same model and instructions as the tests)
 - [ ] Charts: switched off for the small local model; rules saved in `librechat-config/charts-addendum.md`
 - [x] Model results loaded as tables (`model_effects`, `model_comparison`, plus `vs_expected_pct` on each song)
 
@@ -54,6 +55,23 @@ Both ports are only reachable from your own computer.
 `python3 checks.py` runs a 12-point smoke test (data matches the CSVs, model results are as reported, the agent's login is read-only). Run it after `./start.sh` and after any change to the database setup.
 
 `python3 query.py "SELECT count() FROM spotify.songs"` runs SQL through the tool server the same way the agent does. See `example-questions.md` for checked questions.
+
+## Grading the agent
+
+`python3 eval_agent.py` asks the agent 11 questions and checks each answer against the real database. A question only passes if the agent actually queried the database and its answer contains the true numbers. It includes traps (a request to delete data, and questions where a model might invent factors). `--set held` runs 7 more questions that were not used for tuning. `--model <name>` compares other local models.
+
+| Round | Tuned questions | Held-out questions |
+|---|---|---|
+| First instructions | 4/11 | not run |
+| Rewritten for a small model | 8/11 | 4/7 |
+| After fixing a tool-call bug | 9/11 | 6/7 (partly seen while fixing, so slightly optimistic) |
+
+What changed the score most: short strict rules, a "which table for which question" guide, and query templates. One bug was found by looking at failures: a `%` in the example query made the small model write a broken tool call, so "does X affect growth?" questions silently produced no answer. A lookup without `%` fixed it.
+
+**Known limits of the small local model (`llama3.2`, 3B):**
+- Text values in its queries sometimes break (stray quote characters), giving NULL or 0 for a question that has an answer.
+- On a two-part question it can run only one part and then state a number for the other that it never queried. Always check the SQL shown at the end of an answer.
+- A bigger tool-capable model is the real fix. A 14B model that is already installed (`qwen2.5-coder`) is no better here and would use about 10 GB of memory.
 
 ## Start and stop
 
