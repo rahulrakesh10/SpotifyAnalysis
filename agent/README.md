@@ -9,8 +9,10 @@ A ClickHouse database holding the enriched songs, plus a read-only tool server s
 - [x] ClickHouse tool server (MCP) with token auth
 - [x] LibreChat connected to the tool server (3 tools visible, token auth working)
 - [x] Agent instructions ("Song Analyst" preset in `librechat-config/librechat.yaml`)
-- [x] Charts: the agent can draw a bar chart in the chat for comparisons and rankings (LibreChat Artifacts)
-- [ ] Try the agent in the chat with an Anthropic API key and tune the instructions (charts untested)
+- [x] Agent runs on a local Ollama model (`song-analyst`, made from llama3.2), so no API key is needed
+- [x] LibreChat reaches Ollama and gets proper tool calls back (checked from inside the container)
+- [ ] Try the agent in the chat and check its answers against the database (not done yet)
+- [ ] Charts: switched off for the small local model; rules saved in `librechat-config/charts-addendum.md`
 - [x] Model results loaded as tables (`model_effects`, `model_comparison`, plus `vs_expected_pct` on each song)
 
 ## Run
@@ -28,7 +30,9 @@ Needs Docker. Data loads from `../data/spotify_2025_enriched.csv` the first time
 ./setup-librechat.sh    # clones LibreChat, writes its config, starts it
 ```
 
-Open http://localhost:3080, create an account, and add your Anthropic API key when asked (it stays in your own account in LibreChat, not in any file). Pick **Song Analyst** in the model menu.
+Open http://localhost:3080, create an account (it stays on your computer), and pick **Song Analyst** in the model menu. No API key is needed: it uses the local model through Ollama, so Ollama must be running. `./start.sh` creates the `song-analyst` model from your existing `llama3.2` the first time.
+
+The model is small, so check its numbers. In testing, a 14B model (`qwen2.5-coder`) ignored the database and made up results, while `llama3.2` called the tool and answered correctly. Every answer includes the SQL it ran, so it can be checked, and `try_agent.py` runs the same agent from the terminal.
 
 ## What the agent can do
 

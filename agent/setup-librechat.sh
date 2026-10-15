@@ -16,7 +16,7 @@ if [ ! -f .env ]; then
   perl -pi -e "s/^JWT_SECRET=.*/JWT_SECRET=$(openssl rand -hex 32)/" .env
   perl -pi -e "s/^JWT_REFRESH_SECRET=.*/JWT_REFRESH_SECRET=$(openssl rand -hex 32)/" .env
   perl -pi -e "s/^MEILI_MASTER_KEY=.*/MEILI_MASTER_KEY=$(openssl rand -hex 16)/" .env
-  # Each person enters their own Anthropic key in the chat UI, so none is stored here
+  # The agent runs on a local Ollama model, so no API key is stored here
   perl -pi -e "s/^ANTHROPIC_API_KEY=.*/ANTHROPIC_API_KEY=user_provided/" .env
   printf "\nUID=%s\nGID=%s\nMCP_AUTH_TOKEN=%s\nSCHEDULES_SINGLE_PROCESS=true\nANTHROPIC_MODELS=claude-sonnet-5-5,claude-opus-5-5,claude-haiku-4-5-20251001\n" "$(id -u)" "$(id -g)" "$MCP_AUTH_TOKEN" >> .env
   chmod 600 .env
@@ -24,4 +24,4 @@ fi
 
 cp ../librechat-config/librechat.yaml ../librechat-config/docker-compose.override.yml .
 docker compose up -d api mongodb meilisearch
-echo "LibreChat: http://localhost:3080  (create an account, then add your Anthropic API key when asked)"
+echo "LibreChat: http://localhost:3080  (create a local account; no API key needed. Ollama must be running.)"

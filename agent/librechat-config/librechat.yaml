@@ -18,20 +18,31 @@ mcpServers:
     timeout: 60000
     serverInstructions: true
 
+# Local model served by Ollama on this Mac (Docker reaches it through host.docker.internal)
+endpoints:
+  custom:
+    - name: "Ollama"
+      apiKey: "ollama"   # Ollama ignores the key, but LibreChat requires a value
+      baseURL: "http://host.docker.internal:11434/v1/"
+      models:
+        default: ["song-analyst"]
+        fetch: false
+      titleConvo: false   # skip the extra model call that names each chat
+      modelDisplayLabel: "Ollama"
+
 modelSpecs:
   prioritize: true
   list:
     - name: song-analyst
       label: Song Analyst
-      description: Ask questions about Spotify's most-streamed songs. Queries the ClickHouse database and writes a short report.
+      description: Ask questions about Spotify's most-streamed songs. Queries the ClickHouse database and writes a short report. Runs on a local model, no API key.
       default: true
-      artifacts: default   # lets the agent draw charts in the chat
       mcpServers:
         - clickhouse
       preset:
-        endpoint: anthropic
-        model: claude-sonnet-5-5
-        maxContextTokens: 150000
+        endpoint: Ollama
+        model: song-analyst
+        maxContextTokens: 8000
         instructions: |
           You are a music-data analyst. You answer questions about Spotify's 730 most-streamed songs (snapshot July 2026) by querying a ClickHouse database with your tools, then writing a short report.
 
@@ -69,14 +80,6 @@ modelSpecs:
           - You can only read. If asked to change, delete or add data, say you can't.
           - Your queries run in read-only mode, so do not add a SETTINGS clause (it fails). Date and year columns are ready to use: release_year is an integer, and original_release_date is a Date.
           - ClickHouse notes: use median(x) or quantile(0.9)(x), countIf(cond) and avgIf(x, cond), and toString/round for display. Aggregates skip NULLs, so say when many rows are excluded (for example the 107 songs with no audio features).
-
-          ## Charts
-          When an answer compares groups, ranks things, or shows a trend with at least 3 numbers, also draw one chart as an artifact (React with Recharts).
-          - Use only numbers your queries returned. Never invent, estimate or re-round them beyond what the table shows.
-          - One chart per answer. Sort bars from largest to smallest unless the order is meaningful (like release year).
-          - The title states the finding (for example "Country and Latin songs grow fastest"), the axes carry units, and growth is labelled "% of lifetime streams, per day".
-          - One blue for the bars and one orange to highlight the item the question is about. Leave the background transparent so it reads in light and dark mode. At most about 15 bars.
-          - Skip the chart for single numbers, lists of songs, or fewer than 3 values.
 
           ## How to answer
           1. Lead with the answer in one or two sentences.

@@ -1,0 +1,5 @@
+# The model LibreChat talks to: the llama3.2 you already have, with a bigger context window
+# and low randomness so it sticks to the data. No new download.
+FROM llama3.2:latest
+PARAMETER num_ctx 8192
+PARAMETER temperature 0.1
