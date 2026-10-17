@@ -13,7 +13,8 @@ A ClickHouse database holding the enriched songs, plus a read-only tool server s
 - [x] LibreChat reaches Ollama and gets proper tool calls back (checked from inside the container)
 - [x] Ready-made song tools (`songs_mcp/`): the agent picks a tool and fills in simple options instead of writing SQL
 - [x] Agent graded automatically against the database (`eval_agent.py`): 25/33 across four question sets
-- [ ] Try the agent in the LibreChat chat window itself (not done yet; same model and instructions as the tests)
+- [x] LibreChat connects to both tool servers (2 servers, 11 tools, no errors)
+- [ ] Try the agent in the LibreChat chat window itself (needs a local account; the same route was tested with `--openai`)
 - [ ] Charts: switched off for the small local model; rules saved in `librechat-config/charts-addendum.md`
 - [x] Model results loaded as tables (`model_effects`, `model_comparison`, plus `vs_expected_pct` on each song)
 
@@ -76,7 +77,7 @@ Every result starts with a plain-English `summary` sentence. Inputs are bound as
 
 ## Grading the agent
 
-`python3 eval_agent.py --set dev|held|fresh|fresh2` asks the agent fixed questions and checks each answer against the real database. A question passes only if the agent actually called a tool and its answer contains the true numbers. Some are traps: requests to change data must be refused, and "does X matter" questions must not invent effects. `--model <name>` compares other local models.
+`python3 eval_agent.py --set dev|held|fresh|fresh2` asks the agent fixed questions and checks each answer against the real database. A question passes only if the agent actually called a tool and its answer contains the true numbers. Some are traps: requests to change data must be refused, and "does X matter" questions must not invent effects. `--model <name>` compares other local models. `--openai` sends the questions over the same interface LibreChat uses (Ollama's OpenAI-style endpoint) instead of Ollama's native one.
 
 Last run (`llama3.2` with the tools):
 
@@ -90,6 +91,8 @@ Last run (`llama3.2` with the tools):
 
 The score moves by about one question between runs, so read it as "about three in four right".
 
+Over the route LibreChat actually uses (`--openai`), the same four sets gave 23 of 33 (fresh2 4/8, dev 7/11, held 6/7, fresh 6/7). That is the same within the run-to-run noise, so the numbers above are a fair preview of the chat window.
+
 For comparison, the earlier version that wrote its own SQL scored about the same (9/11 and 6/7). The tools did not raise accuracy much. They removed a whole class of failure (broken SQL and quote errors) and made refusing write requests reliable: all 5 "change the data" requests were refused in the last runs.
 
 How it got here:
@@ -101,7 +104,7 @@ How it got here:
 **Known limits of the small model:**
 - Sometimes it calls the right tool and then replies with only "Tool used: ...", with no numbers.
 - Sometimes it picks the wrong tool (a list of songs when it needed totals).
-- A bigger tool-capable model is the real fix. The 14B model already installed is no better here and would use about 10 GB of memory.
+- A bigger tool-capable model is the likely fix, but memory is the limit: on a 16 GB Mac with swap already nearly full (7.1 of 8 GB), the installed 14B model (about 10 GB) was not tested with the new tools because it would have made the laptop crawl. Close other apps first, or try an 8B model (about 5 GB).
 
 ## Start and stop
 

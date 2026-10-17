@@ -1,6 +1,6 @@
 """Grade the Song Analyst on fixed questions against the real database. Needs the stack running.
 
-    python3 eval_agent.py [--model song-analyst] [--only 3,5] [--set dev|held|fresh|fresh2]
+    python3 eval_agent.py [--model song-analyst] [--only 3,5] [--set dev|held|fresh|fresh2] [--openai]
 
 A question passes only if the agent actually queried the database AND its answer contains the true
 values (computed from the database at run time) AND none of the wrong claims we know a model might invent.
@@ -10,7 +10,7 @@ import sys
 import time
 
 from query import run
-from try_agent import ask
+from try_agent import ask, ask_openai
 
 NEG = ["cannot", "can't", "can not", "unable", "read-only", "not able", "don't have", "do not have", "won't", "not allowed", "not possible"]
 NO = [" no ", " not ", "n't", "unlikely", "little", "none", "neither", "cannot", "doesn"]
@@ -151,7 +151,7 @@ if __name__ == "__main__":
             continue
         total += 1
         t = time.time()
-        answer, sqls = ask(item["q"], model, quiet=True)
+        answer, sqls = (ask_openai if "--openai" in args else ask)(item["q"], model, quiet=True)
         problems = grade(item, answer, sqls)
         passed += not problems
         print(f"{'PASS' if not problems else 'FAIL'}  Q{n}: {item['q']}  ({time.time() - t:.0f}s)")
