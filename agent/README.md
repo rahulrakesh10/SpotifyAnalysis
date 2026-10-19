@@ -6,14 +6,15 @@ A ClickHouse database holding the enriched songs, plus a read-only tool server s
 
 - [x] ClickHouse with the `spotify.songs` table (730 songs, typed columns)
 - [x] Read-only database login for the agent (`agent_ro`: SELECT on `spotify` only)
-- [x] ClickHouse tool server (MCP) with token auth
-- [x] LibreChat connected to the tool server (3 tools visible, token auth working)
+- [x] ClickHouse SQL tool server (MCP) with token auth, kept for a stronger model
 - [x] Agent instructions ("Song Analyst" preset in `librechat-config/librechat.yaml`)
 - [x] Agent runs on a local Ollama model (`song-analyst`, made from llama3.2), so no API key is needed
 - [x] LibreChat reaches Ollama and gets proper tool calls back (checked from inside the container)
 - [x] Ready-made song tools (`songs_mcp/`): the agent picks a tool and fills in simple options instead of writing SQL
 - [x] Agent graded automatically against the database (`eval_agent.py`): 25/33 across four question sets
 - [x] LibreChat connects to both tool servers (2 servers, 11 tools, no errors)
+- [x] `preflight.sh` checks the setup and asks the agent a test question
+- [x] `DEMO.md`: a walkthrough with questions that answered correctly 3 times out of 3
 - [ ] Try the agent in the LibreChat chat window itself (needs a local account; the same route was tested with `--openai`)
 - [ ] Charts: switched off for the small local model; rules saved in `librechat-config/charts-addendum.md`
 - [x] Model results loaded as tables (`model_effects`, `model_comparison`, plus `vs_expected_pct` on each song)
@@ -35,11 +36,11 @@ Needs Docker. Data loads from `../data/spotify_2025_enriched.csv` the first time
 
 Open http://localhost:3080, create an account (it stays on your computer), and pick **Song Analyst** in the model menu. No API key is needed: it uses the local model through Ollama, so Ollama must be running. `./start.sh` creates the `song-analyst` model from your existing `llama3.2` the first time.
 
-The model is small, so check its numbers. In testing, a 14B model (`qwen2.5-coder`) ignored the database and made up results, while `llama3.2` called the tool and answered correctly. Every answer includes the SQL it ran, so it can be checked, and `try_agent.py` runs the same agent from the terminal.
+The model is small, so check its numbers. LibreChat shows which tool ran for each answer, and `try_agent.py` runs the same agent from the terminal. Run `./preflight.sh` first: it checks Ollama, memory and the services, and asks the agent one test question. See `DEMO.md` for a walkthrough.
 
-## What the agent can do
+## Free-form SQL server (optional)
 
-The tool server gives the agent three tools: `list_databases`, `list_tables` and `run_query`. It runs through the `agent_ro` login, which cannot write, alter or drop anything.
+The `clickhouse` tool server is configured but not used by the small model. It gives a stronger model three tools: `list_databases`, `list_tables` and `run_query`. It runs through the `agent_ro` login, which cannot write, alter or drop anything.
 
 - ClickHouse: http://127.0.0.1:8123
 - Tool server: http://127.0.0.1:8000/mcp (needs `MCP_AUTH_TOKEN` from `.env` as a bearer token)
@@ -71,7 +72,7 @@ Every result starts with a plain-English `summary` sentence. Inputs are bound as
 
 ## Testing
 
-`python3 checks.py` runs a 12-point smoke test (data matches the CSVs, model results are as reported, the agent's login is read-only). Run it after `./start.sh` and after any change to the database setup.
+`python3 checks.py` runs a 13-point smoke test (data matches the CSVs, model results are as reported, the genre list is complete, the agent's login is read-only). Run it after `./start.sh` and after any change to the database setup.
 
 `python3 query.py "SELECT count() FROM spotify.songs"` runs SQL through the tool server the same way the agent does. See `example-questions.md` for checked questions.
 
@@ -79,19 +80,19 @@ Every result starts with a plain-English `summary` sentence. Inputs are bound as
 
 `python3 eval_agent.py --set dev|held|fresh|fresh2` asks the agent fixed questions and checks each answer against the real database. A question passes only if the agent actually called a tool and its answer contains the true numbers. Some are traps: requests to change data must be refused, and "does X matter" questions must not invent effects. `--model <name>` compares other local models. `--openai` sends the questions over the same interface LibreChat uses (Ollama's OpenAI-style endpoint) instead of Ollama's native one.
 
-Last run (`llama3.2` with the tools):
+Last run, over the route LibreChat uses (`--openai`, `llama3.2` with the tools):
 
 | Question set | Passed | How clean the test is |
 |---|---|---|
-| dev (11) | 8 | tuned against |
+| dev (11) | 9 | tuned against |
 | held (7) | 6 | failures seen earlier |
-| fresh (7) | 6 | failures seen earlier |
-| fresh2 (8) | 5 | cleanest: written before the last fixes |
-| **All** | **25 of 33** | |
+| fresh (7) | 5 | failures seen earlier |
+| fresh2 (8) | 4 | cleanest: written before the last fixes |
+| **All** | **24 of 33 (73%)** | |
 
-The score moves by about one question between runs, so read it as "about three in four right".
+The score moves by one or two questions between runs, so read it as "about three in four right". Earlier runs over Ollama's native route scored 25 of 33, which is the same within that noise.
 
-Over the route LibreChat actually uses (`--openai`), the same four sets gave 23 of 33 (fresh2 4/8, dev 7/11, held 6/7, fresh 6/7). That is the same within the run-to-run noise, so the numbers above are a fair preview of the chat window.
+Two fixes late in the work mattered most: dropping the "Tool used:" line from the instructions (the small model kept replying with only that line and no answer), and listing words like "remove" and "delete" as change requests (it had treated "remove all explicit songs" as a filter and claimed the database changed). In the final spot checks the refusal questions were right 4 of 4 times in one round and 2 of 3 in another, so refusal is good but not perfect. It never changes data either way, because the database login can only read.
 
 For comparison, the earlier version that wrote its own SQL scored about the same (9/11 and 6/7). The tools did not raise accuracy much. They removed a whole class of failure (broken SQL and quote errors) and made refusing write requests reliable: all 5 "change the data" requests were refused in the last runs.
 
