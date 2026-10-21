@@ -22,7 +22,12 @@ echo; echo "Starting the project (the first start takes a minute)..."
 ./start.sh >/dev/null 2>&1
 for i in $(seq 1 40); do python3 checks.py >/dev/null 2>&1 && break; sleep 3; done
 python3 checks.py | tail -1 | sed 's/^/  /'
-curl -s -o /dev/null -w "  LibreChat web page: HTTP %{http_code}\n" http://127.0.0.1:3080/
+web=000
+for i in $(seq 1 45); do   # LibreChat takes up to a minute to start
+  web=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3080/)
+  [ "$web" = 200 ] && break; sleep 2
+done
+[ "$web" = 200 ] && ok "LibreChat web page is up" || bad "LibreChat web page is not answering (HTTP $web). Wait a minute and run ./preflight.sh again"
 
 echo; echo "Asking the agent a test question (a few seconds)..."
 answer=$(python3 try_agent.py --openai "What factors predict faster growth beyond release age?" 2>&1)
@@ -34,5 +39,6 @@ else
 fi
 
 echo
+if [ "$fail" = 1 ]; then echo "Not ready: see the FAIL line above."; exit 1; fi
 echo "Ready. Open http://localhost:3080, create an account, and pick 'Song Analyst'."
 echo "When you are done, run ./stop.sh to free your memory."
