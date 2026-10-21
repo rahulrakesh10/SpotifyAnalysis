@@ -25,7 +25,13 @@ python3 checks.py | tail -1 | sed 's/^/  /'
 curl -s -o /dev/null -w "  LibreChat web page: HTTP %{http_code}\n" http://127.0.0.1:3080/
 
 echo; echo "Asking the agent a test question (a few seconds)..."
-python3 try_agent.py --openai "Which artist has the most songs in the list?" 2>&1 | tail -6 | sed 's/^/  /'
+answer=$(python3 try_agent.py --openai "What factors predict faster growth beyond release age?" 2>&1)
+echo "$answer" | sed -n '3,8p' | cut -c1-160 | sed 's/^/  /'
+if echo "$answer" | grep -qi "latin" && echo "$answer" | grep -qi "country"; then
+  ok "The agent gave the expected answer (Latin Music and Country)"
+else
+  echo "  WARN  The answer looks different from expected. The agent is a small model, so try the question again in the chat."
+fi
 
 echo
 echo "Ready. Open http://localhost:3080, create an account, and pick 'Song Analyst'."
