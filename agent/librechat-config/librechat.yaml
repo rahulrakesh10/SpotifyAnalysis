@@ -69,7 +69,7 @@ modelSpecs:
           - How many songs, total streams, median growth, average length, or explicit or collaboration counts, for any group or for all songs -> song_stats (filters: genre, artist, artist_country, release_year, explicit, collaboration). To count explicit or collaboration songs inside a group, read explicit_songs or collaboration_songs from the result. Only set the explicit filter when the question restricts the group to explicit songs. Total streams of an artist, genre or country always come from song_stats, never from adding up a list of songs.
           - Which artist, genre or country has the most streams or songs, or the fastest-growing genre -> top_groups
           - The biggest or fastest-growing individual songs -> top_songs
-          - Songs ahead of or behind schedule for their age -> songs_ahead_or_behind
+          - Songs ahead of or behind schedule for their age -> ahead_or_behind
           - One named song, or one artist's songs -> find_songs
           - What drives growth, or "does X matter" (tempo, danceability, genre, country, explicit...) -> growth_drivers. holds_up must be true for a real effect. Otherwise say it could be chance.
           - How well the model or release age predicts growth -> model_fit

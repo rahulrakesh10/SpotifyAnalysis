@@ -56,7 +56,7 @@ A 3B model writes unreliable SQL, so the agent gets ready-made tools instead (`s
 | `song_stats` | song count, total streams, median growth, average length, explicit/collaboration counts, for any group |
 | `top_groups` | which artist, genre or country has the most streams or songs, or the fastest growth |
 | `top_songs` | the biggest or fastest-growing individual songs |
-| `songs_ahead_or_behind` | songs growing faster or slower than typical for their age |
+| `ahead_or_behind` | songs growing faster or slower than typical for their age |
 | `find_songs` | one named song or artist |
 | `growth_drivers` | what predicts growth, or whether one factor matters |
 | `model_fit` | how well release age predicts growth |
@@ -102,7 +102,10 @@ How it got here:
 - Sending the text `"null"` for unused options broke every call until the cleaner dropped it (score fell to 4/11 first).
 - A genre list I hard-coded as 12 of 20 was caught by `checks.py`.
 
+**Found by trying it in the real chat window:** LibreChat checks a tool's inputs strictly before calling it, and shows the model each tool as `<name>_mcp_<server>`. My earlier tests skipped both, so they overstated accuracy. The tool server now accepts loose inputs (numbers or booleans sent as text, extra options, `"null"`), answers a wrong genre with the list of valid ones, and the confusingly named `songs_ahead_or_behind` became `ahead_or_behind`. `try_agent.py` now mirrors LibreChat's naming and input check. With that stricter harness the eight demo questions score 6 of 8; the other two failures are the model printing its tool call as text.
+
 **Known limits of the small model:**
+- Sometimes it prints its tool call as text (like `{"name": "find_songs", ...}`) instead of running it. Regenerate the answer.
 - Sometimes it calls the right tool and then replies with only "Tool used: ...", with no numbers.
 - Sometimes it picks the wrong tool (a list of songs when it needed totals).
 - A bigger tool-capable model is the likely fix, but memory is the limit: on a 16 GB Mac with swap already nearly full (7.1 of 8 GB), the installed 14B model (about 10 GB) was not tested with the new tools because it would have made the laptop crawl. Close other apps first, or try an 8B model (about 5 GB).

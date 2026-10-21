@@ -4,9 +4,10 @@ A small model is unreliable at writing SQL (stray quotes, wrong columns, half-an
 These tools take simple parameters instead, bind them safely, and return plain numbers plus a note on
 how to read them. Read-only: the database login can only SELECT.
 """
+import functools
 import inspect
 import os
-from typing import Literal, Optional
+from typing import Literal, Optional, Union, get_args
 
 import clickhouse_connect
 from fastmcp import FastMCP
@@ -25,6 +26,8 @@ COUNTRY_NAMES = {
 Genre = Literal["Pop", "Rap/Hip Hop", "Latin Music", "Asian Music", "Alternative", "Brazilian Music", "Country",
                 "Electro", "Dance", "R&B", "Rock", "Indian Music", "African Music", "Bolero", "Classical",
                 "Films/Games", "French Chanson", "Reggae", "Singer & Songwriter", "Soul & Funk"]
+
+GENRES = list(get_args(Genre))
 
 _client = None
 
@@ -71,6 +74,61 @@ def billions(n):
     return f"{n:.2f} billion" if n is not None else "n/a"
 
 
+class BadInput(Exception):
+    """A value the tool cannot use. Returned to the model as a normal answer so it can retry."""
+
+
+VALID = {"group_by": ["artist", "genre", "artist_country"], "measure": ["total_streams", "song_count", "median_growth"],
+         "direction": ["ahead", "behind"], "sort_by": ["total_streams", "growth"], "column": ["genre", "artist_country"]}
+
+
+def as_int(name, v):
+    try:
+        return int(float(str(v).strip()))
+    except ValueError:
+        raise BadInput(f"{name} must be a whole number, but got '{v}'.")
+
+
+def as_bool(name, v):
+    if isinstance(v, bool):
+        return v
+    text = str(v).strip().lower()
+    if text in ("true", "yes", "y", "1"):
+        return True
+    if text in ("false", "no", "n", "0"):
+        return False
+    raise BadInput(f"{name} must be true or false, but got '{v}'.")
+
+
+def coerce(kwargs):
+    """Models send numbers and booleans as text and get option names slightly wrong. Fix what is fixable and
+    explain the rest. LibreChat checks the input type before the call, so the tool schemas accept text too."""
+    out = {}
+    for k, v in kwargs.items():
+        if v is None:            # an option the model did not use
+            out[k] = None
+        elif k == "limit":
+            out[k] = max(1, min(as_int(k, v), 25))
+        elif k == "release_year":
+            out[k] = as_int(k, v)
+        elif k in ("explicit", "collaboration"):
+            out[k] = as_bool(k, v)
+        elif k == "genre":
+            match = next((g for g in GENRES if g.lower() == str(v).strip().lower()), None)
+            if match is None:
+                hint = " That is a country: use artist_country." if str(v).strip().lower() in COUNTRY_NAMES else ""
+                raise BadInput(f"'{v}' is not a genre.{hint} Genres: {', '.join(GENRES)}.")
+            out[k] = match
+        elif k in VALID:
+            match = next((o for o in VALID[k] if o == str(v).strip().lower().replace(" ", "_")), None)
+            if match is None:
+                raise BadInput(f"{k} must be one of: {', '.join(VALID[k])}. Got '{v}'.")
+            out[k] = match
+        else:
+            out[k] = v
+    return out
+
+
 NULLISH = {"", "null", "none", "nil", "n/a", "na", "any", "all", "undefined", "unspecified"}
 TOOL_PARAMS = {}   # tool name -> the parameters it really has
 
@@ -87,10 +145,25 @@ class CleanArguments(Middleware):
             if (allowed is None or k in allowed) and not (v is None or (isinstance(v, str) and v.strip().lower() in NULLISH))}
         return await call_next(context)
 
+    async def on_list_tools(self, context, call_next):
+        """Publish schemas that allow extra options. LibreChat rejects an unexpected option before the call
+        ever reaches this server, so a small model that adds one would get an error; the call above drops them."""
+        tools = await call_next(context)
+        for t in tools:
+            t.parameters["additionalProperties"] = True
+        return tools
+
 
 def tool(fn):
     TOOL_PARAMS[fn.__name__] = set(inspect.signature(fn).parameters)
-    return mcp.tool(fn)
+
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        try:
+            return fn(*args, **coerce(kwargs))
+        except BadInput as e:
+            return {"summary": str(e)}
+    return mcp.tool(wrapper)
 
 
 tokens = {os.environ["MCP_AUTH_TOKEN"]: {"client_id": "agent", "scopes": []}}
@@ -99,10 +172,10 @@ mcp.add_middleware(CleanArguments())
 
 
 @tool
-def song_stats(genre: Optional[Genre] = None, artist: Optional[str] = None, artist_country: Optional[str] = None,
-               release_year: Optional[int] = None, explicit: Optional[bool] = None,
-               collaboration: Optional[bool] = None) -> dict:
-    """Statistics for a group of songs, with every filter optional. With no filters it covers all 730 songs.
+def song_stats(genre: Optional[str] = None, artist: Optional[str] = None, artist_country: Optional[str] = None,
+               release_year: Optional[Union[int, str]] = None, explicit: Optional[Union[bool, str]] = None,
+               collaboration: Optional[Union[bool, str]] = None) -> dict:
+    """Genres: Pop, Rap/Hip Hop, Latin Music, Asian Music, Alternative, Brazilian Music, Country, Electro, Dance, R&B, Rock, Indian Music, African Music, Bolero, Classical, Films/Games, French Chanson, Reggae, Singer & Songwriter, Soul & Funk. release_year is a number like 2025; explicit and collaboration are true or false. Statistics for a group of songs, with every filter optional. With no filters it covers all 730 songs.
     Returns: number of songs, total streams in billions, median growth (today's streams as a percent of all-time streams),
     average length in minutes, explicit songs, collaboration songs, and how many songs lack a genre, country or audio features.
     Use for: how many songs, total streams of an artist or genre, median growth of a genre, average length, counts of explicit songs."""
@@ -125,9 +198,9 @@ def song_stats(genre: Optional[Genre] = None, artist: Optional[str] = None, arti
 
 
 @tool
-def top_groups(group_by: Literal["artist", "genre", "artist_country"] = "artist",
-               measure: Literal["total_streams", "song_count", "median_growth"] = "total_streams", limit: int = 5, release_year: Optional[int] = None) -> dict:
-    """Rank artists, genres or countries. group_by picks what to rank; measure picks how: total_streams (sum of all-time streams),
+def top_groups(group_by: str = "artist", measure: str = "total_streams", limit: Union[int, str] = 5,
+               release_year: Optional[Union[int, str]] = None) -> dict:
+    """group_by is artist, genre or artist_country. measure is total_streams, song_count or median_growth. release_year is a number like 2025. Rank artists, genres or countries. group_by picks what to rank; measure picks how: total_streams (sum of all-time streams),
     song_count, or median_growth (groups with fewer than 10 songs are skipped). Optionally limit to one release_year.
     Use for: which artist/genre/country has the most streams or songs, or the fastest-growing genre."""
     order = {"total_streams": "total_streams_billions", "song_count": "songs", "median_growth": "median_growth_pct"}[measure]
@@ -144,9 +217,9 @@ def top_groups(group_by: Literal["artist", "genre", "artist_country"] = "artist"
 
 
 @tool
-def top_songs(sort_by: Literal["total_streams", "growth"] = "total_streams", limit: int = 5, release_year: Optional[int] = None,
-              genre: Optional[Genre] = None, artist: Optional[str] = None, artist_country: Optional[str] = None) -> dict:
-    """The biggest individual songs, by all-time total_streams or by current growth (today's streams as a percent of all-time streams).
+def top_songs(sort_by: str = "total_streams", limit: Union[int, str] = 5, release_year: Optional[Union[int, str]] = None,
+              genre: Optional[str] = None, artist: Optional[str] = None, artist_country: Optional[str] = None) -> dict:
+    """sort_by is total_streams or growth. Genres: Pop, Rap/Hip Hop, Latin Music, Asian Music, Alternative, Brazilian Music, Country, Electro, Dance, R&B, Rock, Indian Music, African Music, Bolero, Classical, Films/Games, French Chanson, Reggae, Singer & Songwriter, Soul & Funk. The biggest individual songs, by all-time total_streams or by current growth (today's streams as a percent of all-time streams).
     Optionally limit to a release_year, genre, artist or artist_country.
     Use for: which song has the most streams, the most-streamed song of a year, the fastest-growing songs."""
     where, params, used = song_filter(genre=genre, artist=artist, artist_country=artist_country, release_year=release_year)
@@ -160,9 +233,9 @@ def top_songs(sort_by: Literal["total_streams", "growth"] = "total_streams", lim
 
 
 @tool
-def songs_ahead_or_behind(direction: Literal["ahead", "behind"] = "ahead", limit: int = 5, release_year: Optional[int] = None,
-                          genre: Optional[Genre] = None) -> dict:
-    """Songs growing fastest (ahead) or slowest (behind) compared with what is typical for songs of their age.
+def ahead_or_behind(direction: str = "ahead", limit: Union[int, str] = 5, release_year: Optional[Union[int, str]] = None,
+                          genre: Optional[str] = None) -> dict:
+    """direction is ahead or behind. Genres: Pop, Rap/Hip Hop, Latin Music, Asian Music, Alternative, Brazilian Music, Country, Electro, Dance, R&B, Rock, Indian Music, African Music, Bolero, Classical, Films/Games, French Chanson, Reggae, Singer & Songwriter, Soul & Funk. Songs growing fastest (ahead) or slowest (behind) compared with what is typical for songs of their age.
     vs_expected_pct of +100 means growing twice as fast as expected for its age. Optionally filter by release_year or genre.
     Use for: which songs are ahead of or behind schedule, biggest risers or fallers for their age."""
     where, params, used = song_filter(genre=genre, release_year=release_year)
@@ -176,7 +249,7 @@ def songs_ahead_or_behind(direction: Literal["ahead", "behind"] = "ahead", limit
 
 
 @tool
-def find_songs(text: str, limit: int = 10) -> dict:
+def find_songs(text: str, limit: Union[int, str] = 10) -> dict:
     """Look up songs whose title or artist contains the text (not case sensitive). Returns track, artist, genre, release date,
     total streams, growth and vs_expected_pct. Use for: questions about one named song or artist's songs."""
     data = rows(f"""SELECT track, artist, genre, original_release_date AS released, spotify_streams_total AS total_streams,
@@ -227,8 +300,8 @@ def model_fit() -> dict:
 
 
 @tool
-def list_values(column: Literal["genre", "artist_country"] = "genre") -> dict:
-    """The genres or country codes that exist in the data, with how many songs each has. Use to find the exact name to filter on."""
+def list_values(column: str = "genre") -> dict:
+    """column is genre or artist_country. The genres or country codes that exist in the data, with how many songs each has. Use to find the exact name to filter on."""
     return {"column": column, "values": rows(f"SELECT {column} AS value, count() AS songs FROM songs WHERE {column} IS NOT NULL GROUP BY {column} ORDER BY songs DESC LIMIT 40")}
 
 

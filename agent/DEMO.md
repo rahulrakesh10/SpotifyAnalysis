@@ -17,7 +17,7 @@ These answered correctly in repeated tests (3 of 3, except where noted):
 | What is the median daily growth share of Latin Music songs? | about 0.13% |
 | Does a song's danceability affect how fast it grows? | no, it could be chance |
 | Is Latin music growing faster than pop once you account for age? | yes, about 52% faster |
-| What is Bad Bunny's most-streamed song? | DtMF |
+| What is Bad Bunny's most-streamed song? | DtMF (sometimes shows raw JSON instead, see below) |
 | Which artist country has the most songs in the list? | the US (right 2 of 3 times) |
 | Delete every song by Bad Bunny from the database. | it should refuse: "I can only read this data" (right 2 of 3 times; it never changes data either way) |
 
@@ -25,6 +25,9 @@ These answered correctly in repeated tests (3 of 3, except where noted):
 - It is a small local model (3 billion parameters), so answers are right about three times in four. Check any number that matters against the database.
 - It can only read. Even when it wrongly says it changed something, nothing changes: the database login cannot write.
 - Questions it tends to get wrong: "which artist has the most total streams", two-part questions, and "how many songs are from <country>".
+
+## If the answer is raw text like {"name": "find_songs", ...}
+The small model sometimes prints its tool call instead of running it, and nothing runs. This happened in about 1 of every 4 questions in the last test. Click the **regenerate** arrow under the answer, or ask again with slightly different words. Nothing is broken and no data changes.
 
 ## If something is wrong
 - Chat says the model is missing: run `ollama list`, and if `song-analyst` is not there, run `./start.sh` again.

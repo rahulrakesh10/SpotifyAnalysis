@@ -9,6 +9,7 @@ import time
 import urllib.request
 from pathlib import Path
 
+import jsonschema
 import yaml
 
 from query import call_tool, list_tools
@@ -17,6 +18,9 @@ OLLAMA = "http://127.0.0.1:11434/api/chat"
 SPEC = yaml.safe_load((Path(__file__).parent / "librechat-config" / "librechat.yaml").read_text())["modelSpecs"]["list"][0]
 INSTRUCTIONS = SPEC["preset"]["instructions"]
 _tools = None
+# LibreChat shows the model each tool as <name>_mcp_<server> and rejects inputs that do not match the
+# tool's schema before the call reaches the server. Mirror both, so tests behave like the real chat.
+SUFFIX = "_mcp_songs"
 
 
 def tools():
@@ -24,8 +28,24 @@ def tools():
     global _tools
     if _tools is None:
         _tools = [{"type": "function", "function": {
-            "name": t["name"], "description": t["description"], "parameters": t["inputSchema"]}} for t in list_tools()]
+            "name": t["name"] + SUFFIX, "description": t["description"], "parameters": t["inputSchema"]}} for t in list_tools()]
     return _tools
+
+
+def execute(name, args):
+    """Run a tool the way LibreChat would: strict name and input checks first. Returns (ok, body)."""
+    real = name[:-len(SUFFIX)] if name.endswith(SUFFIX) else name
+    schemas = {t["function"]["name"][:-len(SUFFIX)]: t["function"]["parameters"] for t in tools()}
+    if name != real + SUFFIX or real not in schemas:
+        return False, f'Tool "{name}" not found.'
+    try:
+        jsonschema.validate(args, schemas[real])
+    except jsonschema.ValidationError as e:
+        return False, f'Tool "{name}" input failed schema validation: {e.message[:200]}'
+    try:
+        return call_tool(real, args)
+    except Exception as e:
+        return False, str(e)
 
 
 def chat(model, messages):
@@ -58,10 +78,7 @@ def ask_openai(question, model, max_steps=6, quiet=False):
             calls.append(f"{name}({json.dumps(args, ensure_ascii=False)})")
             if not quiet:
                 print(f"  [tool] {calls[-1][:300]}")
-            try:
-                ok, body = call_tool(name, args)
-            except Exception as e:
-                ok, body = False, str(e)
+            ok, body = execute(name, args)
             text = json.dumps(body, ensure_ascii=False)[:3000] if ok else "ERROR: " + str(body)[:500]
             messages.append({"role": "tool", "tool_call_id": call.get("id", ""), "content": text})
     return "(stopped: too many tool calls)", calls
@@ -81,10 +98,7 @@ def ask(question, model, max_steps=6, quiet=False):
             calls.append(f"{name}({json.dumps(args, ensure_ascii=False)})")
             if not quiet:
                 print(f"  [tool] {calls[-1][:300]}")
-            try:
-                ok, body = call_tool(name, args)
-            except Exception as e:  # a bad argument from the model: report it back like LibreChat would
-                ok, body = False, str(e)
+            ok, body = execute(name, args)
             text = json.dumps(body, ensure_ascii=False)[:3000] if ok else "ERROR: " + str(body)[:500]
             if not quiet:
                 print(f"  [result] {text[:200]}")
