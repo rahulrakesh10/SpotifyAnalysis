@@ -23,6 +23,15 @@ _tools = None
 SUFFIX = "_mcp_songs"
 
 
+def default_model():
+    """The 8B model if it is installed, otherwise the small one."""
+    try:
+        names = [m["name"] for m in json.loads(urllib.request.urlopen("http://127.0.0.1:11434/api/tags", timeout=3).read())["models"]]
+    except Exception:
+        names = []
+    return "song-analyst-8b" if "song-analyst-8b:latest" in names else "song-analyst"
+
+
 def tools():
     """The song tools, in the format Ollama expects (read from the running tool server)."""
     global _tools
@@ -108,7 +117,7 @@ def ask(question, model, max_steps=6, quiet=False):
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    model = "song-analyst"
+    model = default_model()
     api_flag = "--openai" in args
     args = [a for a in args if a != "--openai"]
     if "--model" in args:

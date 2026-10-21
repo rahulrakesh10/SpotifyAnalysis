@@ -1,0 +1,5 @@
+# An 8B alternative to song-analyst: llama3.1 with a bigger context window and low randomness.
+# Needs `ollama pull llama3.1:8b` (about 5 GB) and about 5 GB of free memory.
+FROM llama3.1:8b
+PARAMETER num_ctx 8192
+PARAMETER temperature 0.1

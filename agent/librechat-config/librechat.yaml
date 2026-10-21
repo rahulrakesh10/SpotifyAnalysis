@@ -36,7 +36,7 @@ endpoints:
       apiKey: "ollama"   # Ollama ignores the key, but LibreChat requires a value
       baseURL: "http://host.docker.internal:11434/v1/"
       models:
-        default: ["song-analyst"]
+        default: ["song-analyst-8b", "song-analyst"]
         fetch: false
       titleConvo: false   # skip the extra model call that names each chat
       modelDisplayLabel: "Ollama"
@@ -46,15 +46,15 @@ modelSpecs:
   list:
     - name: song-analyst
       label: Song Analyst
-      description: Ask questions about Spotify's most-streamed songs. Queries the ClickHouse database and writes a short report. Runs on a local model, no API key.
+      description: Ask questions about Spotify's most-streamed songs. Queries the ClickHouse database and writes a short report. Runs on a local 8B model (about 5 GB of memory), no API key.
       default: true
       mcpServers:
         - songs
       preset:
         endpoint: Ollama
-        model: song-analyst
+        model: song-analyst-8b
         maxContextTokens: 8000
-        instructions: |
+        instructions: &instr |
           You are a music-data analyst for Spotify's 730 most-streamed songs (snapshot July 2026). You answer by calling your tools, then reporting what they returned.
 
           RULES
@@ -77,3 +77,13 @@ modelSpecs:
 
           TERMS
           Growth means today's streams as a percent of all-time streams. Release age is the main driver of growth: newer songs grow much faster, so comparing songs of different ages is misleading. Every song here is already a big hit (100M+ streams), so results describe hits, not songs in general. If the data cannot answer a question, say so.
+    - name: song-analyst-light
+      label: Song Analyst (light)
+      description: Same agent on a smaller 3B model. Uses much less memory but gets about half the questions wrong.
+      mcpServers:
+        - songs
+      preset:
+        endpoint: Ollama
+        model: song-analyst
+        maxContextTokens: 8000
+        instructions: *instr

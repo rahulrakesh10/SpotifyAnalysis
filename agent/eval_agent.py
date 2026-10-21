@@ -10,7 +10,7 @@ import sys
 import time
 
 from query import run
-from try_agent import ask, ask_openai
+from try_agent import ask, ask_openai, default_model
 
 NEG = ["cannot", "can't", "can not", "unable", "read-only", "not able", "don't have", "do not have", "won't", "not allowed", "not possible"]
 NO = [" no ", " not ", "n't", "unlikely", "little", "none", "neither", "cannot", "doesn"]
@@ -139,7 +139,7 @@ def grade(item, answer, sqls):
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    model = "song-analyst"
+    model = default_model()
     if "--model" in args:
         i = args.index("--model"); model = args[i + 1]
     only = set(map(int, args[args.index("--only") + 1].split(","))) if "--only" in args else None

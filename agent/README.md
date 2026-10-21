@@ -11,7 +11,7 @@ A ClickHouse database holding the enriched songs, plus a read-only tool server s
 - [x] Agent runs on a local Ollama model (`song-analyst`, made from llama3.2), so no API key is needed
 - [x] LibreChat reaches Ollama and gets proper tool calls back (checked from inside the container)
 - [x] Ready-made song tools (`songs_mcp/`): the agent picks a tool and fills in simple options instead of writing SQL
-- [x] Agent graded automatically against the database (`eval_agent.py`): 25/33 across four question sets
+- [x] Agent graded automatically against the database (`eval_agent.py`): 27/33 (82%) on the 8B model, 17/33 on the 3B, under a strict LibreChat-style test
 - [x] LibreChat connects to both tool servers (2 servers, 11 tools, no errors)
 - [x] `preflight.sh` checks the setup and asks the agent a test question
 - [x] `DEMO.md`: a walkthrough with questions that answered correctly 3 times out of 3
@@ -94,6 +94,15 @@ The score moves by one or two questions between runs, so read it as "about three
 
 Two fixes late in the work mattered most: dropping the "Tool used:" line from the instructions (the small model kept replying with only that line and no answer), and listing words like "remove" and "delete" as change requests (it had treated "remove all explicit songs" as a filter and claimed the database changed). In the final spot checks the refusal questions were right 4 of 4 times in one round and 2 of 3 in another, so refusal is good but not perfect. It never changes data either way, because the database login can only read.
 
+**Model size matters most.** Same 33 questions, same strict LibreChat-style test:
+
+| Model | Memory | Passed |
+|---|---|---|
+| `llama3.2` (3B) | about 3.5 GB | 17 of 33 (52%) |
+| `llama3.1` (8B), now the default | about 5 GB | 27 of 33 (82%) |
+
+The 8B model refused every change request and never lost a whole question set; its misses were two-part questions and a few tool calls it printed as text. LibreChat offers both: **Song Analyst** (8B) and **Song Analyst (light)** (3B, for when memory is tight). The 8B needs a one-time `ollama pull llama3.1:8b` (about 5 GB); `./start.sh` then creates its alias.
+
 For comparison, the earlier version that wrote its own SQL scored about the same (9/11 and 6/7). The tools did not raise accuracy much. They removed a whole class of failure (broken SQL and quote errors) and made refusing write requests reliable: all 5 "change the data" requests were refused in the last runs.
 
 How it got here:
@@ -108,7 +117,7 @@ How it got here:
 - Sometimes it prints its tool call as text (like `{"name": "find_songs", ...}`) instead of running it. Regenerate the answer.
 - Sometimes it calls the right tool and then replies with only "Tool used: ...", with no numbers.
 - Sometimes it picks the wrong tool (a list of songs when it needed totals).
-- A bigger tool-capable model is the likely fix, but memory is the limit: on a 16 GB Mac with swap already nearly full (7.1 of 8 GB), the installed 14B model (about 10 GB) was not tested with the new tools because it would have made the laptop crawl. Close other apps first, or try an 8B model (about 5 GB).
+- The 8B model fixed most of this (see above). A bigger one (such as the 14B already installed) is still limited by memory: on a 16 GB Mac with swap already nearly full (7.1 of 8 GB), the installed 14B model (about 10 GB) was not tested with the new tools because it would have made the laptop crawl. Close other apps first, or try an 8B model (about 5 GB).
 
 ## Start and stop
 

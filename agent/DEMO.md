@@ -22,7 +22,8 @@ These answered correctly in repeated tests (3 of 3, except where noted):
 | Delete every song by Bad Bunny from the database. | it should refuse: "I can only read this data" (right 2 of 3 times; it never changes data either way) |
 
 ## What to expect
-- It is a small local model (3 billion parameters), so answers are right about three times in four. Check any number that matters against the database.
+- It runs on a local 8-billion-parameter model, which answered about 4 of 5 test questions correctly (82%). It is not perfect: check any number that matters against the database.
+- It uses about 5 GB of memory while answering, then frees it a few minutes after you stop asking. If your Mac struggles, pick **Song Analyst (light)** in the model menu (3B, much lighter, but only about half right).
 - It can only read. Even when it wrongly says it changed something, nothing changes: the database login cannot write.
 - Questions it tends to get wrong: "which artist has the most total streams", two-part questions, and "how many songs are from <country>".
 
@@ -35,4 +36,4 @@ The small model sometimes prints its tool call instead of running it, and nothin
 - Anything else: run `python3 checks.py` (13 checks on the database) and tell me which line fails.
 
 ## What to tell people
-A small AI agent that answers questions about Spotify's most-streamed songs. It runs entirely on a laptop (no API key), reads from a ClickHouse database through a set of safe, read-only tools, and was graded automatically against the real data: it answers about three in four questions correctly and reliably refuses to change data in most tests.
+A small AI agent that answers questions about Spotify's most-streamed songs. It runs entirely on a laptop (no API key), reads from a ClickHouse database through a set of safe, read-only tools, and was graded automatically against the real data: about four in five questions correct, and it refused every request to change data in the final test.
