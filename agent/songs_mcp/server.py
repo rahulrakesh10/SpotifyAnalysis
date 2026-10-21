@@ -300,6 +300,16 @@ def model_fit() -> dict:
 
 
 @tool
+def change_data_request(request: Optional[str] = None) -> dict:
+    """Call this when the user asks to change, add, delete, remove, rename, update or edit any data or songs.
+    Nothing can be changed because this data is read-only. This returns the message to give the user.
+    Do NOT use a statistics or search tool for these requests."""
+    return {"summary": "REFUSED. This data is read-only, so nothing was changed, added or deleted. Tell the user: "
+                       "\"I can only read this data, so I can't do that.\" You can offer to show statistics or look up songs instead.",
+            "changed": False}
+
+
+@tool
 def list_values(column: str = "genre") -> dict:
     """column is genre or artist_country. The genres or country codes that exist in the data, with how many songs each has. Use to find the exact name to filter on."""
     return {"column": column, "values": rows(f"SELECT {column} AS value, count() AS songs FROM songs WHERE {column} IS NOT NULL GROUP BY {column} ORDER BY songs DESC LIMIT 40")}

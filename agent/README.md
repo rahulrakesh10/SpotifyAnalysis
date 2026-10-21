@@ -60,6 +60,7 @@ A 3B model writes unreliable SQL, so the agent gets ready-made tools instead (`s
 | `find_songs` | one named song or artist |
 | `growth_drivers` | what predicts growth, or whether one factor matters |
 | `model_fit` | how well release age predicts growth |
+| `change_data_request` | any request to change, add, delete or rename data: returns the refusal message |
 | `list_values` | the genres and countries that exist |
 
 Every result starts with a plain-English `summary` sentence. Inputs are bound as parameters (a quote in a name can't break anything), genre must be a real genre, and a cleaner drops the `"null"` placeholders and made-up parameters small models send. The tools can only read. The free-form SQL server (`clickhouse`) is still configured for a stronger model; its instructions are saved in `librechat-config/sql-instructions.md`.
@@ -94,6 +95,8 @@ The score moves by one or two questions between runs, so read it as "about three
 
 Two fixes late in the work mattered most: dropping the "Tool used:" line from the instructions (the small model kept replying with only that line and no answer), and listing words like "remove" and "delete" as change requests (it had treated "remove all explicit songs" as a filter and claimed the database changed). In the final spot checks the refusal questions were right 4 of 4 times in one round and 2 of 3 in another, so refusal is good but not perfect. It never changes data either way, because the database login can only read.
 
+**Tested in the real chat window (8B model):** of 8 questions, 7 were right after two fixes found there. Right: growth drivers, furthest ahead in 2025, Bad Bunny's top song, median growth leaving out explicit songs, danceability, and two change requests (refused). Wrong: "how many songs, and how many explicit" (answered 210 songs, 210 explicit instead of 730 and 210). The first two delete requests failed before the fixes: the model ran a statistics tool and claimed songs were deleted. Nothing was ever changed (the login is read-only), but two things fixed the behavior: a dedicated `change_data_request` tool the model calls for any change request, and a preset temperature of 0.1 (LibreChat's own default was overriding the model's setting, which my tests had not accounted for).
+
 **Model size matters most.** Same 33 questions, same strict LibreChat-style test:
 
 | Model | Memory | Passed |
@@ -116,7 +119,7 @@ How it got here:
 **Known limits of the small model:**
 - Sometimes it prints its tool call as text (like `{"name": "find_songs", ...}`) instead of running it. Regenerate the answer.
 - Sometimes it calls the right tool and then replies with only "Tool used: ...", with no numbers.
-- Sometimes it picks the wrong tool (a list of songs when it needed totals).
+- Sometimes it picks the wrong tool (a list of songs when it needed totals), and two-part questions can come back half wrong.
 - The 8B model fixed most of this (see above). A bigger one (such as the 14B already installed) is still limited by memory: on a 16 GB Mac with swap already nearly full (7.1 of 8 GB), the installed 14B model (about 10 GB) was not tested with the new tools because it would have made the laptop crawl. Close other apps first, or try an 8B model (about 5 GB).
 
 ## Start and stop

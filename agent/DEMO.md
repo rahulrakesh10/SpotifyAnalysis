@@ -25,7 +25,7 @@ These answered correctly in repeated tests (3 of 3, except where noted):
 - It runs on a local 8-billion-parameter model, which answered about 4 of 5 test questions correctly (82%). It is not perfect: check any number that matters against the database.
 - It uses about 5 GB of memory while answering, then frees it a few minutes after you stop asking. If your Mac struggles, pick **Song Analyst (light)** in the model menu (3B, much lighter, but only about half right).
 - It can only read. Even when it wrongly says it changed something, nothing changes: the database login cannot write.
-- Questions it tends to get wrong: "which artist has the most total streams", two-part questions, and "how many songs are from <country>".
+- Questions it tends to get wrong: two-part questions (for example "how many songs, and how many are explicit" gave 210 and 210 instead of 730 and 210),  "which artist has the most total streams", two-part questions, and "how many songs are from <country>".
 
 ## If the answer is raw text like {"name": "find_songs", ...}
 The small model sometimes prints its tool call instead of running it, and nothing runs. This happened in about 1 of every 4 questions in the last test. Click the **regenerate** arrow under the answer, or ask again with slightly different words. Nothing is broken and no data changes.
