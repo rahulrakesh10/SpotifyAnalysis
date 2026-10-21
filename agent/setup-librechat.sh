@@ -19,6 +19,8 @@ if [ ! -f .env ]; then
   # The agent runs on a local Ollama model, so no API key is stored here
   perl -pi -e "s/^ANTHROPIC_API_KEY=.*/ANTHROPIC_API_KEY=user_provided/" .env
   printf "\nUID=%s\nGID=%s\nMCP_AUTH_TOKEN=%s\nSCHEDULES_SINGLE_PROCESS=true\nANTHROPIC_MODELS=claude-sonnet-5-5,claude-opus-5-5,claude-haiku-4-5-20251001\n" "$(id -u)" "$(id -g)" "$MCP_AUTH_TOKEN" >> .env
+  # Stay logged in for a year (this is a one-person local app), so the login screen is a one-time step
+  perl -pi -e "s/^REFRESH_TOKEN_EXPIRY=.*/REFRESH_TOKEN_EXPIRY=(1000 * 60 * 60 * 24) * 365/" .env
   chmod 600 .env
 fi
 

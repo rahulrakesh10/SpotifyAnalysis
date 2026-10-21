@@ -4,7 +4,8 @@
 1. Quit Firefox and other big apps (the chat is slow if memory is tight).
 2. Run `./preflight.sh`. It checks Ollama and memory, starts everything, and asks the agent a test question.
 3. Open http://localhost:3080, create an account (it stays on your computer), and pick **Song Analyst** in the model menu.
-4. When you are done, run `./stop.sh` to free your memory.
+4. After you have made your account, run `./lock-signups.sh` once. It closes sign-ups so no one else can create an account. (The chat is only reachable from this computer anyway, and your browser stays logged in for a year, so you only see the login page once.)
+5. When you are done, run `./stop.sh` to free your memory.
 
 ## Questions to ask
 These answered correctly in repeated tests (3 of 3, except where noted):
