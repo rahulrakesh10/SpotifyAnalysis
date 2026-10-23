@@ -191,6 +191,12 @@ def song_stats(genre: Optional[str] = None, artist: Optional[str] = None, artist
                f"median growth {out['median_growth_pct']}% of all-time streams per day; average length {out['avg_length_minutes']} minutes; "
                f"{out['explicit_songs']} explicit; {out['collaboration_songs']} collaborations; "
                f"{gaps['songs_missing_genre']} have no genre.") if out["songs"] else "No songs match."
+    if used and out["songs"]:
+        # A small model often adds a filter it should not (for example explicit=true when asked "how many songs, and
+        # how many are explicit?"). Always state the whole-list totals so the right numbers are in the answer anyway.
+        whole = rows("SELECT count() AS songs, countIf(explicit) AS explicit_songs, countIf(is_collaboration) AS collaboration_songs FROM songs")[0]
+        summary += (f" For reference, the whole list (no filters) has {whole['songs']} songs, "
+                    f"{whole['explicit_songs']} explicit and {whole['collaboration_songs']} collaborations.")
     result = {"summary": summary, "filters_used": used or "none (all songs)", **out, "data_gaps": gaps}
     if out["songs"] == 0:
         result["note"] = "No songs match these filters. Check the spelling with find_songs or list_values."
