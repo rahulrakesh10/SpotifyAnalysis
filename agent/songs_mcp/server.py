@@ -46,7 +46,8 @@ def rows(sql, params=None):
     return [{k: (round(v, 4) if isinstance(v, float) else v) for k, v in r.items()} for r in result.named_results()]
 
 
-def song_filter(genre=None, artist=None, artist_country=None, release_year=None, explicit=None, collaboration=None):
+def song_filter(genre=None, artist=None, artist_country=None, release_year=None, explicit=None, collaboration=None,
+                album_type=None, artist_type=None):
     """Optional filters -> (WHERE clause, bound parameters, readable description)."""
     conds, params, used = [], {}, {}
     if genre:
@@ -62,6 +63,10 @@ def song_filter(genre=None, artist=None, artist_country=None, release_year=None,
         conds.append("explicit = {explicit:UInt8}"); params["explicit"] = int(bool(explicit)); used["explicit"] = bool(explicit)
     if collaboration is not None:
         conds.append("is_collaboration = {collab:UInt8}"); params["collab"] = int(bool(collaboration)); used["collaboration"] = bool(collaboration)
+    if album_type:
+        conds.append("album_type = {album:String}"); params["album"] = album_type; used["album_type"] = album_type
+    if artist_type:
+        conds.append("artist_type = {atype:String}"); params["atype"] = artist_type; used["artist_type"] = artist_type
     return (" WHERE " + " AND ".join(conds)) if conds else "", params, used
 
 
@@ -78,8 +83,18 @@ class BadInput(Exception):
     """A value the tool cannot use. Returned to the model as a normal answer so it can retry."""
 
 
-VALID = {"group_by": ["artist", "genre", "artist_country"], "measure": ["total_streams", "song_count", "median_growth"],
-         "direction": ["ahead", "behind"], "sort_by": ["total_streams", "growth"], "column": ["genre", "artist_country"]}
+VALID = {"group_by": ["artist", "genre", "artist_country", "release_year", "album_type", "artist_type"],
+         "measure": ["total_streams", "song_count", "median_growth", "avg_danceability", "avg_energy", "avg_valence",
+                     "avg_tempo", "avg_length_minutes"],
+         "order": ["highest", "lowest"], "direction": ["ahead", "behind"], "sort_by": ["total_streams", "growth"],
+         "column": ["genre", "artist_country"]}
+ALBUM_TYPES = {"single": "single", "singles": "single", "album": "album", "albums": "album", "ep": "ep", "eps": "ep",
+               "compile": "compile", "compilation": "compile", "compilations": "compile"}
+ARTIST_TYPES = {"solo": "Person", "solo artist": "Person", "person": "Person", "individual": "Person", "soloist": "Person",
+                "group": "Group", "band": "Group", "bands": "Group", "groups": "Group", "duo": "Group"}
+MEASURE_ALIASES = {"danceability": "avg_danceability", "energy": "avg_energy", "valence": "avg_valence", "mood": "avg_valence",
+                   "tempo": "avg_tempo", "length": "avg_length_minutes", "growth": "median_growth", "streams": "total_streams",
+                   "songs": "song_count", "count": "song_count"}
 
 
 def as_int(name, v):
@@ -113,6 +128,12 @@ def coerce(kwargs):
             out[k] = as_int(k, v)
         elif k in ("explicit", "collaboration"):
             out[k] = as_bool(k, v)
+        elif k == "album_type":
+            out[k] = ALBUM_TYPES.get(str(v).strip().lower()) or (_ for _ in ()).throw(
+                BadInput(f"album_type must be one of: single, album, ep, compile. Got '{v}'."))
+        elif k == "artist_type":
+            out[k] = ARTIST_TYPES.get(str(v).strip().lower()) or (_ for _ in ()).throw(
+                BadInput(f"artist_type must be solo or group. Got '{v}'."))
         elif k == "genre":
             match = next((g for g in GENRES if g.lower() == str(v).strip().lower()), None)
             if match is None:
@@ -120,7 +141,10 @@ def coerce(kwargs):
                 raise BadInput(f"'{v}' is not a genre.{hint} Genres: {', '.join(GENRES)}.")
             out[k] = match
         elif k in VALID:
-            match = next((o for o in VALID[k] if o == str(v).strip().lower().replace(" ", "_")), None)
+            text = str(v).strip().lower().replace(" ", "_")
+            if k == "measure":
+                text = MEASURE_ALIASES.get(text, text)
+            match = next((o for o in VALID[k] if o == text), None)
             if match is None:
                 raise BadInput(f"{k} must be one of: {', '.join(VALID[k])}. Got '{v}'.")
             out[k] = match
@@ -174,23 +198,29 @@ mcp.add_middleware(CleanArguments())
 @tool
 def song_stats(genre: Optional[str] = None, artist: Optional[str] = None, artist_country: Optional[str] = None,
                release_year: Optional[Union[int, str]] = None, explicit: Optional[Union[bool, str]] = None,
-               collaboration: Optional[Union[bool, str]] = None) -> dict:
-    """Genres: Pop, Rap/Hip Hop, Latin Music, Asian Music, Alternative, Brazilian Music, Country, Electro, Dance, R&B, Rock, Indian Music, African Music, Bolero, Classical, Films/Games, French Chanson, Reggae, Singer & Songwriter, Soul & Funk. release_year is a number like 2025; explicit and collaboration are true or false. Statistics for a group of songs, with every filter optional. With no filters it covers all 730 songs.
+               collaboration: Optional[Union[bool, str]] = None, album_type: Optional[str] = None,
+               artist_type: Optional[str] = None) -> dict:
+    """Genres: Pop, Rap/Hip Hop, Latin Music, Asian Music, Alternative, Brazilian Music, Country, Electro, Dance, R&B, Rock, Indian Music, African Music, Bolero, Classical, Films/Games, French Chanson, Reggae, Singer & Songwriter, Soul & Funk. release_year is a number like 2025; explicit and collaboration are true or false; album_type is single, album, ep or compile (singles are songs released as a single); artist_type is solo or group (a group is a band). Statistics for a group of songs, with every filter optional. With no filters it covers all 730 songs.
     Returns: number of songs, total streams in billions, median growth (today's streams as a percent of all-time streams),
-    average length in minutes, explicit songs, collaboration songs, and how many songs lack a genre, country or audio features.
-    Use for: how many songs, total streams of an artist or genre, median growth of a genre, average length, counts of explicit songs."""
-    where, params, used = song_filter(genre, artist, artist_country, release_year, explicit, collaboration)
+    average length in minutes, average audio features (danceability, energy, mood, tempo), explicit songs, collaboration songs, and how many songs lack a genre, country or audio features.
+    Use for: how many songs, total streams of an artist or genre, median growth of a group, average length, average danceability, energy or tempo of a group, counts of explicit songs, bands versus solo artists, singles versus albums."""
+    where, params, used = song_filter(genre, artist, artist_country, release_year, explicit, collaboration, album_type, artist_type)
     out = rows(f"""SELECT count() AS songs, round(sum(spotify_streams_total)/1e9, 3) AS total_streams_billions,
         median(daily_stream_share_pct) AS median_growth_pct, round(avg(duration_sec)/60, 2) AS avg_length_minutes,
+        round(avg(af_danceability), 3) AS avg_danceability, round(avg(af_energy), 3) AS avg_energy,
+        round(avg(af_valence), 3) AS avg_valence, round(avg(af_tempo), 1) AS avg_tempo_bpm,
         countIf(explicit) AS explicit_songs, countIf(is_collaboration) AS collaboration_songs,
         countIf(genre IS NULL) AS songs_missing_genre, countIf(artist_country IS NULL) AS songs_missing_country,
         countIf(af_energy IS NULL) AS songs_missing_audio_features FROM songs{where}""", params)[0]
     gaps = {k: out.pop(k) for k in ("songs_missing_genre", "songs_missing_country", "songs_missing_audio_features")}
     where_text = describe(used) if used else "all songs"
+    audio = ("" if out["avg_danceability"] is None else
+             f" Average audio: danceability {out['avg_danceability']}, energy {out['avg_energy']}, "
+             f"mood (valence) {out['avg_valence']}, tempo {out['avg_tempo_bpm']} BPM.")
     summary = (f"{out['songs']} songs match ({where_text}). Total streams {billions(out['total_streams_billions'])}; "
                f"median growth {out['median_growth_pct']}% of all-time streams per day; average length {out['avg_length_minutes']} minutes; "
                f"{out['explicit_songs']} explicit; {out['collaboration_songs']} collaborations; "
-               f"{gaps['songs_missing_genre']} have no genre.") if out["songs"] else "No songs match."
+               f"{gaps['songs_missing_genre']} have no genre.{audio}") if out["songs"] else "No songs match."
     if used and out["songs"]:
         # A small model often adds a filter it should not (for example explicit=true when asked "how many songs, and
         # how many are explicit?"). Always state the whole-list totals so the right numbers are in the answer anyway.
@@ -205,20 +235,30 @@ def song_stats(genre: Optional[str] = None, artist: Optional[str] = None, artist
 
 @tool
 def top_groups(group_by: str = "artist", measure: str = "total_streams", limit: Union[int, str] = 5,
-               release_year: Optional[Union[int, str]] = None) -> dict:
-    """group_by is artist, genre or artist_country. measure is total_streams, song_count or median_growth. release_year is a number like 2025. Rank artists, genres or countries. group_by picks what to rank; measure picks how: total_streams (sum of all-time streams),
-    song_count, or median_growth (groups with fewer than 10 songs are skipped). Optionally limit to one release_year.
-    Use for: which artist/genre/country has the most streams or songs, or the fastest-growing genre."""
-    order = {"total_streams": "total_streams_billions", "song_count": "songs", "median_growth": "median_growth_pct"}[measure]
-    cond = "WHERE {col} IS NOT NULL".replace("{col}", group_by) + (" AND release_year = {year:Int32}" if release_year is not None else "")
-    having = "HAVING songs >= 10" if measure == "median_growth" else ""
+               release_year: Optional[Union[int, str]] = None, order: str = "highest") -> dict:
+    """group_by is artist, genre, artist_country, release_year, album_type or artist_type. measure is total_streams, song_count, median_growth, avg_danceability, avg_energy, avg_valence, avg_tempo or avg_length_minutes. order is highest (default) or lowest. release_year is a number like 2025.
+    Rank groups of songs. group_by picks what to compare (for example genre, or solo versus group, or singles versus albums, or release year); measure picks how: total_streams (sum of all-time streams), song_count, median_growth, or the average danceability, energy, mood (valence), tempo or length. Groups with fewer than 10 songs are skipped for growth and audio measures. Optionally limit to one release_year.
+    Use for: which artist, genre, country or year has the most streams or songs, the fastest-growing genre, which genre is most danceable or energetic, the lowest or least of something, songs per release year, singles versus albums, bands versus solo artists."""
+    columns = {"total_streams": "total_streams_billions", "song_count": "songs", "median_growth": "median_growth_pct",
+               "avg_danceability": "avg_danceability", "avg_energy": "avg_energy", "avg_valence": "avg_valence",
+               "avg_tempo": "avg_tempo_bpm", "avg_length_minutes": "avg_length_minutes"}
+    column = columns[measure]
+    cond = f"WHERE {group_by} IS NOT NULL" + (" AND release_year = {year:Int32}" if release_year is not None else "")
+    having = "HAVING songs >= 10" if measure not in ("total_streams", "song_count") else ""
+    direction = "ASC" if order == "lowest" else "DESC"
     params = {"year": int(release_year)} if release_year is not None else {}
     data = rows(f"""SELECT {group_by} AS name, count() AS songs, round(sum(spotify_streams_total)/1e9, 3) AS total_streams_billions,
-        median(daily_stream_share_pct) AS median_growth_pct FROM songs {cond} GROUP BY {group_by} {having}
-        ORDER BY {order} DESC LIMIT {max(1, min(int(limit), 25))}""", params)
-    parts = [f"{i}) {r['name']}: {billions(r['total_streams_billions'])} streams, {r['songs']} songs, median growth {r['median_growth_pct']}%"
+        median(daily_stream_share_pct) AS median_growth_pct, round(avg(af_danceability), 3) AS avg_danceability,
+        round(avg(af_energy), 3) AS avg_energy, round(avg(af_valence), 3) AS avg_valence, round(avg(af_tempo), 1) AS avg_tempo_bpm,
+        round(avg(duration_sec)/60, 2) AS avg_length_minutes FROM songs {cond} GROUP BY {group_by} {having}
+        ORDER BY {column} {direction} LIMIT {max(1, min(int(limit), 25))}""", params)
+    label = {"total_streams": "{} total streams", "song_count": "{} songs", "median_growth": "median growth {}%",
+             "avg_danceability": "average danceability {}", "avg_energy": "average energy {}", "avg_valence": "average mood (valence) {}",
+             "avg_tempo": "average tempo {} BPM", "avg_length_minutes": "average length {} minutes"}[measure]
+    parts = [f"{i}) {r['name']}: " + label.format(billions(r[column]) if measure == "total_streams" else r[column]) + ("" if measure == "song_count" else f" ({r['songs']} songs)")
              for i, r in enumerate(data, 1)]
-    summary = f"Top {group_by} by {measure.replace('_', ' ')}" + (f" (released {release_year})" if release_year else "") + ": " + "; ".join(parts)
+    summary = (f"{order.capitalize()} {group_by} by {measure.replace('_', ' ')}" + (f" (released {release_year})" if release_year else "")
+               + ": " + "; ".join(parts))
     return {"summary": summary, "ranked_by": measure, "group_by": group_by, "release_year": release_year, "rows": data}
 
 

@@ -1,6 +1,6 @@
 """Grade the Song Analyst on fixed questions against the real database. Needs the stack running.
 
-    python3 eval_agent.py [--model song-analyst] [--only 3,5] [--set dev|held|fresh|fresh2] [--openai]
+    python3 eval_agent.py [--model song-analyst] [--only 3,5] [--set dev|held|fresh|fresh2|new] [--openai]
 
 A question passes only if the agent actually queried the database AND its answer contains the true
 values (computed from the database at run time) AND none of the wrong claims we know a model might invent.
@@ -102,6 +102,23 @@ FRESH2 = [
 ]
 
 
+# New-abilities set: audio averages, bands vs solo, singles vs albums, trends by release year.
+NEW = [
+    {"q": "Which genre has the highest average danceability?",
+     "truth": "SELECT genre FROM spotify.songs WHERE genre IS NOT NULL GROUP BY genre HAVING count() >= 10 ORDER BY avg(af_danceability) DESC LIMIT 1"},
+    {"q": "Which genre has the lowest average energy?",
+     "truth": "SELECT genre FROM spotify.songs WHERE genre IS NOT NULL GROUP BY genre HAVING count() >= 10 ORDER BY avg(af_energy) ASC LIMIT 1"},
+    {"q": "How many songs are by bands?",
+     "truth": "SELECT countIf(artist_type = 'Group') FROM spotify.songs"},
+    {"q": "What is the median growth of songs released as singles?",
+     "truth": "SELECT median(daily_stream_share_pct) FROM spotify.songs WHERE album_type = 'single'"},
+    {"q": "Which release year has the most songs in the list?",
+     "truth": "SELECT release_year FROM spotify.songs GROUP BY release_year ORDER BY count() DESC LIMIT 1"},
+    {"q": "What is the average tempo of Rap/Hip Hop songs?",
+     "truth": "SELECT avg(af_tempo) FROM spotify.songs WHERE genre = 'Rap/Hip Hop'"},
+]
+
+
 def numbers(text):
     return [float(x.replace(",", "")) for x in re.findall(r"-?\d[\d,]*\.?\d*", text) if x.strip(",")]
 
@@ -144,7 +161,7 @@ if __name__ == "__main__":
         i = args.index("--model"); model = args[i + 1]
     only = set(map(int, args[args.index("--only") + 1].split(","))) if "--only" in args else None
     chosen = args[args.index("--set") + 1] if "--set" in args else "dev"
-    questions = {"dev": QUESTIONS, "held": HELD_OUT, "fresh": FRESH, "fresh2": FRESH2}[chosen]
+    questions = {"dev": QUESTIONS, "held": HELD_OUT, "fresh": FRESH, "fresh2": FRESH2, "new": NEW}[chosen]
     passed = total = 0
     for n, item in enumerate(questions, 1):
         if only and n not in only:
